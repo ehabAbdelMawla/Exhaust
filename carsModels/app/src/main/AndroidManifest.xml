@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.carsmodels">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".addNewBrand.AddNewBrand" android:label="Add New Brand"/>
+        <activity android:name=".BrandCars.BrandCars" />
+        <activity android:name=".BrandCars.AddNewCar" android:label="Add New Car"/>
+        <activity android:name=".BrandCars.CarsCategories" />
+        <activity android:name=".CarCategory.AddNewCategory" android:label="Add New Category"/>
+        <activity android:name=".Colors.ColorsSettings" android:label="Colors Settings"/>
+        <activity android:name=".speceficeations.specificationSettings" android:label="Specifications Settings"/>
+        <activity android:name=".speceficeations.addNewSpecification" android:label="Add New Specification"/>
+    </application>
+</manifest>

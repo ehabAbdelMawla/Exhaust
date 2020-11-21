@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".addNewBrand.AddNewBrand" >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="185dp"
+                    android:layout_height="185dp"
+                    android:layout_marginStart="113dp"
+                    android:layout_marginTop="38dp"
+                    android:layout_marginEnd="113dp"
+                    android:src="@drawable/placholder"
+                    app:civ_border_width="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/addImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="?attr/colorPrimary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/image"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/brandName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:autofillHints=""
+                android:focusable="auto"
+                android:gravity="center"
+                android:hint="Brand Name"
+                android:inputType="textPersonName"
+                android:textColorHighlight="#FFFFFF"
+                android:textCursorDrawable="@null" />
+
+            <EditText
+                android:id="@+id/brandAgent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:autofillHints=""
+                android:focusable="auto"
+                android:gravity="center"
+                android:hint="Brand Agent"
+                android:inputType="textPersonName"
+                android:textColorLink="@color/colorPrimary"
+                android:textCursorDrawable="@null" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="20dp">
+
+                <Button
+                    android:id="@+id/addButton"
+                    android:layout_width="185dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="113dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="113dp"
+                    android:background="@drawable/rounded_button"
+                    android:padding="10dp"
+                    android:text="Add"
+                    android:textAllCaps="true"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
