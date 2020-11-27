@@ -68,6 +68,8 @@
                 android:textColorHighlight="#FFFFFF"
                 android:textCursorDrawable="@null" />
 
+
+
             <EditText
                 android:id="@+id/carCountryOrigin"
                 android:layout_width="match_parent"
@@ -106,7 +108,7 @@
                     android:focusable="auto"
                     android:gravity="center"
                     android:hint="Hourse power"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:textColorLink="@color/colorPrimary"
                     android:textCursorDrawable="@null" />
 
@@ -120,7 +122,7 @@
                     android:focusable="auto"
                     android:gravity="center"
                     android:hint="Motor Capacity"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:textColorLink="@color/colorPrimary"
                     android:textCursorDrawable="@null" />
             </LinearLayout>
@@ -147,7 +149,7 @@
                     android:focusable="auto"
                     android:gravity="center"
                     android:hint="Bag Space"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:maxWidth="200dp"
                     android:textColorLink="@color/colorPrimary"
                     android:textCursorDrawable="@null" />

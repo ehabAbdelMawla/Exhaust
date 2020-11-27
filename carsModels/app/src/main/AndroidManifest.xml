@@ -16,7 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".addNewBrand.AddNewBrand" android:label="Add New Brand"/>
+        <activity android:name=".addNewBrand.addNewBrandActivity" android:label="Add New Brand"/>
         <activity android:name=".BrandCars.BrandCars" />
         <activity android:name=".BrandCars.AddNewCar" android:label="Add New Car"/>
         <activity android:name=".BrandCars.CarsCategories" />

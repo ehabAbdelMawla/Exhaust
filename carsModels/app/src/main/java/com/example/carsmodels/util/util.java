@@ -13,6 +13,7 @@ public class util {
 
     private static util util;
 
+
     public static util getInstance() {
         if (util == null) {
             util = new util();
@@ -32,12 +33,16 @@ public class util {
         return "";
     }
 
+//    convert bitmap to byte array and make images compression and change scale
     public byte[] getBitmapAsByteArray(Bitmap bitmap) {
+        //                Compress Image
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.25), (int)(bitmap.getHeight()*0.25), false);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
         return outputStream.toByteArray();
     }
 
+//    get Maximum of specific number column in specific table in DB
     public int getMaximum(String fName,String tabelName){
         try {
             Cursor res = MainActivity.db.getReadableDatabase().rawQuery(String.format("SELECT MAX(%s) as id FROM %s",fName,tabelName), null);

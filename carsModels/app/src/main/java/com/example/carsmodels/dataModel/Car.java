@@ -123,4 +123,33 @@ public class Car {
         }
         return 0;
     }
+
+    public long remove() {
+        try {
+            SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
+            return databaseWriteable.delete("cars", "id=?",new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            Log.i("cars", "remove", e);
+        }
+        return 0;
+    }
+
+    public long update() {
+        try {
+            SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
+            ContentValues myValues = new ContentValues();
+            myValues.put("id", this.id);
+            myValues.put("carName", this.carName);
+            myValues.put("country", this.country);
+            myValues.put("motorCapacity", this.motorCapacity);
+            myValues.put("hoursePower", this.hoursePower);
+            myValues.put("bagSpace", this.bagSpace);
+            myValues.put("carImage", this.img);
+            myValues.put("brandId", this.brandId);
+            return databaseWriteable.update("cars",myValues,"id=?",new String[]{String.valueOf(id)} );
+        } catch (Exception e) {
+            Log.i("cars", "update", e);
+        }
+        return 0;
+    }
 }
