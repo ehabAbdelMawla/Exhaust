@@ -51,6 +51,7 @@ public class Specification {
 
 //     DB Operations
 public long insert() {
+    System.out.println("insert");
     try {
         SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
         ContentValues myValues = new ContentValues();
@@ -74,6 +75,8 @@ public long insert() {
     }
 
     public long update() {
+
+        System.out.println("update");
         try {
             SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
             ContentValues myValues = new ContentValues();

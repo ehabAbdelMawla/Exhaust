@@ -1,5 +1,7 @@
 package com.example.carsmodels.BrandCars;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +18,7 @@ import com.example.carsmodels.MainActivity;
 import com.example.carsmodels.R;
 import com.example.carsmodels.dataModel.Brand;
 import com.example.carsmodels.dataModel.Car;
+import com.example.carsmodels.speceficeations.SpecificationCuDialogFragment;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -74,9 +78,9 @@ public class BrandCars extends AppCompatActivity {
         FlexboxLayout brandCarContainer=findViewById(R.id.brandCarContainer);
         brandCarContainer.removeAllViews();
         ArrayList<Car> cars=getAllCarsOfBrand();
-        for(int i=0;i<cars.size();i++){
-            final View modelLayOut = View.inflate(this, R.layout.model_box, null);
-            final Car currentObj=cars.get(i);
+        final BrandCars globalThis=this;
+        for(final Car currentObj:cars){
+            final View modelLayOut = View.inflate(globalThis, R.layout.model_box, null);
             ((TextView) modelLayOut.findViewById(R.id.modelName)).setText(currentObj.getCarName());
             if(currentObj.getImg()!=null){
                 ((ImageView)modelLayOut.findViewById(R.id.modelImage)).setImageBitmap(BitmapFactory.decodeByteArray(currentObj.getImg(), 0,   currentObj.getImg().length));
@@ -88,6 +92,50 @@ public class BrandCars extends AppCompatActivity {
                     Intent carDetails = new Intent(BrandCarsPointer, CarsCategories.class );
                     CarsCategories.setCar(currentObj);
                     startActivity(carDetails);
+                }
+            });
+
+            modelLayOut.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final AlertDialog.Builder alertDialogBuilde = new AlertDialog.Builder(globalThis);
+                    final View popUpView = getLayoutInflater().inflate(R.layout.edit_delete_popup, null);
+                    alertDialogBuilde.setView(popUpView);
+                    final AlertDialog alert = alertDialogBuilde.create();
+                    alert.show();
+                    popUpView.findViewById(R.id.editIcon).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alert.cancel();
+                            //                dialog fragment
+                            new CarsCuDialogFragment(currentObj).show(getSupportFragmentManager(), "edit_car");
+                        }
+                    });
+
+                    popUpView.findViewById(R.id.deleteIcon).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alert.cancel();
+                            new AlertDialog.Builder(globalThis)
+                                    .setTitle("Delete Car?")
+                                    .setMessage("All Car Category,specification and images will lost .")
+                                    .setIcon(android.R.drawable.ic_delete)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            long result = currentObj.remove();
+                                            if (result == 1) {
+                                                Toast.makeText(getApplicationContext(), "Car Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                                LoadCarsData();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, null).show();
+                        }
+                    });
+                    return true;
                 }
             });
             brandCarContainer.addView(modelLayOut);

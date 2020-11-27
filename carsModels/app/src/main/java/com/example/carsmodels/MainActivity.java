@@ -4,16 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,15 +23,15 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.example.carsmodels.BrandCars.BrandCars;
 import com.example.carsmodels.Colors.ColorsSettings;
 import com.example.carsmodels.DB.DB;
-import com.example.carsmodels.addNewBrand.AddNewBrand;
+import com.example.carsmodels.addNewBrand.BrandCuDialogFragment;
+import com.example.carsmodels.addNewBrand.addNewBrandActivity;
 import com.example.carsmodels.dataModel.Brand;
+import com.example.carsmodels.speceficeations.SpecificationCuDialogFragment;
 import com.example.carsmodels.speceficeations.specificationSettings;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -83,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < brands.size(); i++) {
             final View modelLayOut = View.inflate(globalThis, R.layout.model_box, null);
             ((TextView) modelLayOut.findViewById(R.id.modelName)).setText(brands.get(i).getBrandName());
+            System.out.println(brands.get(i).getImg());
             if (brands.get(i).getImg() != null) {
                 ((ImageView) modelLayOut.findViewById(R.id.modelImage)).setImageBitmap(BitmapFactory.decodeByteArray(brands.get(i).getImg(), 0, brands.get(i).getImg().length));
             }
@@ -106,71 +103,13 @@ public class MainActivity extends AppCompatActivity {
                     alertDialogBuilde.setView(popUpView);
                     final AlertDialog alert = alertDialogBuilde.create();
                     alert.show();
-
                     popUpView.findViewById(R.id.editIcon).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             alert.cancel();
-                            final AlertDialog.Builder editBrand = new AlertDialog.Builder(globalThis);
-                            View editView = getLayoutInflater().inflate(R.layout.add_new_brand, null);
-                            editBrand.setView(editView);
-                            final AlertDialog editAlert = editBrand.create();
-                            editAlert.show();
-
-//                            Init Components
-                            imageView = editView.findViewById(R.id.imageView);
-                            final EditText brandNameText = editView.findViewById(R.id.brandName);
-                            final EditText brandAgentText = editView.findViewById(R.id.brandAgent);
-                            Button editButton = editView.findViewById(R.id.addButton);
-                            FloatingActionButton uploadImageButton = editView.findViewById(R.id.addImageButton);
-//                            Set Initial Data
-                            brandNameText.setText(temp.getBrandName());
-                            brandAgentText.setText(temp.getBrandAgent());
-                            editButton.setText("Edit");
-                            if (temp.getImg() != null) {
-                                imageBytes = temp.getImg();
-                                imageView.setImageBitmap(BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length));
-                            } else {
-                                imageBytes = null;
-                            }
-
-                            uploadImageButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-                                }
-                            });
-
-                            editButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (util.getInstance().getVal(brandNameText).equalsIgnoreCase("")) {
-                                        Toast.makeText(globalThis, "Brand Name can not be empty", Toast.LENGTH_LONG);
-                                    } else if (util.getInstance().getVal(brandAgentText).equalsIgnoreCase("")) {
-                                        Toast.makeText(globalThis, "Brand Agent can not be empty", Toast.LENGTH_LONG);
-                                    } else {
-                                        temp.setBrandAgent(util.getInstance().getVal(brandAgentText));
-                                        temp.setBrandName(util.getInstance().getVal(brandNameText));
-                                        if (imageBytes != null) {
-                                            temp.setImg(imageBytes);
-                                        }
-                                        long result = temp.update();
-                                        if (result > 0) {
-                                            Toast.makeText(getApplicationContext(), "Brand updated Successfully", Toast.LENGTH_SHORT).show();
-                                        } else if (result == 0) {
-                                            Toast.makeText(getApplicationContext(), "Brand Already Exist!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
-                                        }
-                                        loadModels();
-                                        editAlert.cancel();
-                                    }
-                                }
-                            });
+                            new BrandCuDialogFragment(temp).show(getSupportFragmentManager(), "edit_Brand");
                         }
                     });
-
-
                     popUpView.findViewById(R.id.deleteIcon).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -206,10 +145,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             Cursor res = db.getReadableDatabase().rawQuery("SELECT * FROM brands", null);
             while (res.moveToNext()) {
+
                 brands.add(new Brand(res.getInt(res.getColumnIndex("id")),
                         res.getString(res.getColumnIndex("brandName")),
                         res.getString(res.getColumnIndex("brandAgent")),
                         res.getBlob(res.getColumnIndex("brandImage"))));
+
+
             }
 
         } catch (Exception e) {
@@ -218,34 +160,6 @@ public class MainActivity extends AppCompatActivity {
         return brands;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Detects request codes
-        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-
-
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-//               === Compress Image ===
-//                bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, false);
-                imageBytes = util.getInstance().getBitmapAsByteArray(bitmap);
-
-                imageView.setImageBitmap(bitmap);
-
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getApplicationContext(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getApplicationContext(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     public void SetButtonsAction() {
 //        add Brand Button
@@ -253,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         addBrandButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent AddNewBrandIntent = new Intent(MainActivityPointer, AddNewBrand.class);
+                Intent AddNewBrandIntent = new Intent(MainActivityPointer, addNewBrandActivity.class);
                 startActivity(AddNewBrandIntent);
             }
         });

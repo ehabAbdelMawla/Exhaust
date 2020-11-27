@@ -13,19 +13,17 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.carsmodels.BrandCars.BrandCars;
 import com.example.carsmodels.MainActivity;
 import com.example.carsmodels.R;
-import com.example.carsmodels.dataModel.Brand;
 import com.example.carsmodels.dataModel.Specification;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
@@ -41,9 +39,7 @@ public class specificationSettings extends AppCompatActivity {
 
     FloatingActionButton addNewSpecificationButton;
     public static boolean updateData = false;
-    int GET_FROM_GALLERY=1;
-    byte[] imageBytes;
-    ImageView imageView;    //for edit dialg
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +51,7 @@ public class specificationSettings extends AppCompatActivity {
 //       End Init component
 
         final specificationSettings globalThis = this;
+
 
 //        Set Actions
         addNewSpecificationButton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +82,7 @@ public class specificationSettings extends AppCompatActivity {
 
     }
 
-    private void loadSpecifications() {
+    public void loadSpecifications() {
         FlexboxLayout specificationsContainer = findViewById(R.id.specificationContainer);
         specificationsContainer.removeAllViews();
         ArrayList<Specification> specs = getAllspecifications();
@@ -105,66 +102,16 @@ public class specificationSettings extends AppCompatActivity {
                     final AlertDialog alert = alertDialogBuilde.create();
                     alert.show();
 
+
                     popUpView.findViewById(R.id.editIcon).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             alert.cancel();
-                            final AlertDialog.Builder editAlertDialogBuilder = new AlertDialog.Builder(globalThis);
-                            View editView = getLayoutInflater().inflate(R.layout.add_new_specification, null);
-                            editAlertDialogBuilder.setView(editView);
-                            final AlertDialog editAlert= editAlertDialogBuilder.create();
-                            editAlert.show();
-
-
-//                          Init components
-                            final EditText specificationEditText= editView.findViewById(R.id.specificationEditText);
-                            imageView=  editView.findViewById(R.id.imageView);
-                            FloatingActionButton uploadImageButton=editView.findViewById(R.id.addImageButton);
-                            Button editButton=editView.findViewById(R.id.addButton);
-
-//                          Set Init Data
-                            specificationEditText.setText(spec.getName());
-                            editButton.setText("Edit");
-                            imageView.setImageBitmap(BitmapFactory.decodeByteArray(spec.getImg(), 0, spec.getImg().length));
-                            imageBytes=spec.getImg();
-//                           Set Actions
-                            uploadImageButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-                                }
-                            });
-
-                            editButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if(util.getInstance().getVal(specificationEditText).equalsIgnoreCase("")){
-                                        Toast.makeText(globalThis,"Specification cannot be empty",Toast.LENGTH_LONG).show();
-                                    }
-                                    else{
-                                        spec.setName(util.getInstance().getVal(specificationEditText));
-                                        spec.setImg(imageBytes);
-                                        long result = spec.update();
-
-                                        if (result > 0) {
-                                            Toast.makeText(getApplicationContext(), "Specification updated Successfully", Toast.LENGTH_SHORT).show();
-                                        } else if (result == 0) {
-                                            Toast.makeText(getApplicationContext(), "Specification Already Exist!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
-                                        }
-                                        loadSpecifications();
-                                        editAlert.cancel();
-                                    }
-
-                                }
-                            });
-
-
-
+                            //                dialog fragment
+                            SpecificationCuDialogFragment editPupUp = new SpecificationCuDialogFragment(spec);
+                            editPupUp.show(getSupportFragmentManager(), "edit_Specification");
                         }
                     });
-
 
                     popUpView.findViewById(R.id.deleteIcon).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -214,32 +161,7 @@ public class specificationSettings extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //Detects request codes
-        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-//               === Compress Image ===
-//                bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, false);
-                imageBytes = util.getInstance().getBitmapAsByteArray(bitmap);
 
-                imageView.setImageBitmap(bitmap);
-
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getApplicationContext(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getApplicationContext(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
 
 }
