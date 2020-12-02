@@ -36,7 +36,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="100dp"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_marginBottom="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -54,7 +54,7 @@
             android:visibility="invisible"
             app:backgroundTint="#121212"
             app:fabCustomSize="50dp"
-            app:layout_constraintBottom_toTopOf="@+id/colorsButton"
+            app:layout_constraintBottom_toTopOf="@+id/specButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/add" />
 
@@ -74,23 +74,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/settings" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/colorsButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="15dp"
-            android:clickable="false"
-            android:focusable="auto"
-            android:foregroundGravity="center"
-            android:textAlignment="center"
-            android:visibility="invisible"
-            app:backgroundTint="#121212"
-            app:fabCustomSize="50dp"
-            app:layout_constraintBottom_toTopOf="@+id/specButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/colors" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

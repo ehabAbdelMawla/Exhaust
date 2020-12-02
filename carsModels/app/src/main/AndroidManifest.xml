@@ -24,5 +24,6 @@
         <activity android:name=".Colors.ColorsSettings" android:label="Colors Settings"/>
         <activity android:name=".speceficeations.specificationSettings" android:label="Specifications Settings"/>
         <activity android:name=".speceficeations.addNewSpecification" android:label="Add New Specification"/>
+        <activity android:name=".BrandCars.CarColorImages" android:label="Images"/>
     </application>
 </manifest>

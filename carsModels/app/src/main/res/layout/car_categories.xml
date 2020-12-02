@@ -8,6 +8,19 @@
     tools:context=".BrandCars.BrandCars"
     >
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/listButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:foregroundGravity="center"
+        android:textAlignment="center"
+        app:fabCustomSize="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/list" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -140,7 +153,19 @@
                 android:id="@+id/carsCategories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="75dp"
+                android:textAlignment="center"
+                app:alignContent="center"
+                app:alignItems="center"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:justifyContent="center">
 
+            </com.google.android.flexbox.FlexboxLayout>
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/carColors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingBottom="75dp"
                 android:textAlignment="center"
                 app:alignContent="center"
@@ -154,17 +179,47 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addCategoryButton"
-        android:layout_width="57dp"
-        android:layout_height="57dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
-        android:clickable="false"
-        android:focusable="auto"
-        android:foregroundGravity="center"
-        android:textAlignment="center"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="100dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/add" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addCategoryButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="15dp"
+            android:clickable="false"
+            android:focusable="auto"
+            android:foregroundGravity="center"
+            android:textAlignment="center"
+            android:visibility="invisible"
+            app:backgroundTint="#121212"
+            app:fabCustomSize="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/ColorAction"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/add" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/ColorAction"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="50dp"
+            android:clickable="false"
+            android:focusable="auto"
+            android:foregroundGravity="center"
+            android:textAlignment="center"
+            android:visibility="invisible"
+            app:backgroundTint="#121212"
+            app:fabCustomSize="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/colors" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
