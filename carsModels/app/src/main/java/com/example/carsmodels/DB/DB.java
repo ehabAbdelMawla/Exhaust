@@ -9,13 +9,13 @@ import androidx.annotation.Nullable;
 public class DB extends SQLiteOpenHelper {
     public DB(@Nullable Context context) {
         super(context, "data.db", null, 1);
+
     }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//     Open FOREIGN Support
-        db.execSQL("PRAGMA foreign_keys=ON;");
+
 //       Brands Table
         db.execSQL("CREATE TABLE IF NOT EXISTS brands (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "brandName VARCHAR(225) UNIQUE NOT NULL," +
@@ -40,15 +40,33 @@ public class DB extends SQLiteOpenHelper {
                 "carId INTEGER NOT NULL," +
                 "  PRIMARY KEY(categoryName,carId)," +
                 " FOREIGN KEY(carId) REFERENCES cars(id) ON DELETE CASCADE ON UPDATE CASCADE)");
-//  System Colors
-        db.execSQL("CREATE TABLE IF NOT EXISTS colors (" +
-                "id INTEGER  PRIMARY KEY AUTOINCREMENT," +
-                "color VARCHAR(225) UNIQUE NOT NULL)");
+
 
         //  System Specification
         db.execSQL("CREATE TABLE IF NOT EXISTS specifications (" +
                 "id INTEGER  PRIMARY KEY AUTOINCREMENT," +
                 "name VARCHAR(225) UNIQUE NOT NULL,img BLOB UNIQUE NOT NULL)");
+
+        //  All Colors
+        db.execSQL("CREATE TABLE IF NOT EXISTS colors (" +
+                "id INTEGER  PRIMARY KEY NOT NULL," +
+                "color VARCHAR(225) UNIQUE NOT NULL)");
+
+        //  Car_Colors
+        db.execSQL("CREATE TABLE IF NOT EXISTS Car_Colors (" +
+                "id INTEGER  UNIQUE NOT NULL," +
+                "carId INTEGER  NOT NULL," +
+                "colorId INTEGER  NOT NULL," +
+                "PRIMARY KEY(carId,colorId)," +
+                "FOREIGN KEY(carId) REFERENCES cars(id) ON DELETE CASCADE ON UPDATE CASCADE," +
+                "FOREIGN KEY(colorId) REFERENCES colors(id) ON DELETE CASCADE ON UPDATE CASCADE)");
+//      Cars Color Images
+        db.execSQL("CREATE TABLE IF NOT EXISTS carImages (" +
+                "id INTEGER UNIQUE NOT NULL," +
+                "relationId INTEGER NOT NULL," +
+                "img BLOB NOT NULL," +
+                "PRIMARY KEY(relationId,img)," +
+                "FOREIGN KEY(relationId) REFERENCES Car_Colors(id) ON DELETE CASCADE ON UPDATE CASCADE)");
 
     }
 
@@ -57,10 +75,18 @@ public class DB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS brands");
         db.execSQL("DROP TABLE IF EXISTS cars");
         db.execSQL("DROP TABLE IF EXISTS carsCategory");
-        db.execSQL("DROP TABLE IF EXISTS colors");
         db.execSQL("DROP TABLE IF EXISTS specifications");
+        db.execSQL("DROP TABLE IF EXISTS colors");
+        db.execSQL("DROP TABLE IF EXISTS Car_Colors");
+        db.execSQL("DROP TABLE IF EXISTS CarImages");
         onCreate(db);
+
     }
 
-
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        //     Open FOREIGN Support
+        db.execSQL("PRAGMA foreign_keys=ON;");
+    }
 }

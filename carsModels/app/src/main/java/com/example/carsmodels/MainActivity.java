@@ -12,23 +12,17 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.carsmodels.BrandCars.BrandCars;
-import com.example.carsmodels.Colors.ColorsSettings;
 import com.example.carsmodels.DB.DB;
 import com.example.carsmodels.addNewBrand.BrandCuDialogFragment;
 import com.example.carsmodels.addNewBrand.addNewBrandActivity;
 import com.example.carsmodels.dataModel.Brand;
-import com.example.carsmodels.speceficeations.SpecificationCuDialogFragment;
 import com.example.carsmodels.speceficeations.specificationSettings;
-import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -63,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
             updateData = false;
         }
         findViewById(R.id.addBrandButton).setVisibility(View.INVISIBLE);
-        findViewById(R.id.colorsButton).setVisibility(View.INVISIBLE);
         findViewById(R.id.specButton).setVisibility(View.INVISIBLE);
 
         YoYo.with(Techniques.SlideInUp)
@@ -171,15 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(AddNewBrandIntent);
             }
         });
-        final FloatingActionButton colorsButton = findViewById(R.id.colorsButton);
-        colorsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent AddNewBrandIntent = new Intent(MainActivityPointer, ColorsSettings.class);
-                startActivity(AddNewBrandIntent);
 
-            }
-        });
 
         final FloatingActionButton specButton = findViewById(R.id.specButton);
         specButton.setOnClickListener(new View.OnClickListener() {
@@ -204,14 +189,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).duration(350).repeat(0).playOn(addBrandButton);
 
-
-                    YoYo.with(Techniques.SlideInUp).onStart(new YoYo.AnimatorCallback() {
-                        @Override
-                        public void call(Animator animator) {
-                            findViewById(R.id.colorsButton).setVisibility(View.VISIBLE);
-                        }
-                    }).duration(400).repeat(0).playOn(colorsButton);
-
                     YoYo.with(Techniques.SlideInUp).onStart(new YoYo.AnimatorCallback() {
                         @Override
                         public void call(Animator animator) {
@@ -227,12 +204,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).duration(350).repeat(0).playOn(addBrandButton);
 
-                    YoYo.with(Techniques.SlideOutDown).onEnd(new YoYo.AnimatorCallback() {
-                        @Override
-                        public void call(Animator animator) {
-                            findViewById(R.id.colorsButton).setVisibility(View.INVISIBLE);
-                        }
-                    }).duration(400).repeat(0).playOn(colorsButton);
                     YoYo.with(Techniques.SlideOutDown).onEnd(new YoYo.AnimatorCallback() {
                         @Override
                         public void call(Animator animator) {
