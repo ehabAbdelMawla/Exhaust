@@ -25,5 +25,6 @@
         <activity android:name=".speceficeations.specificationSettings" android:label="Specifications Settings"/>
         <activity android:name=".speceficeations.addNewSpecification" android:label="Add New Specification"/>
         <activity android:name=".BrandCars.CarColorImages" android:label="Images"/>
+        <activity android:name=".ImageViewPager.FullView" android:theme="@style/FullScreen"/>
     </application>
 </manifest>

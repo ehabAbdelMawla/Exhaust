@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +45,7 @@ public class CarsCategories extends AppCompatActivity {
         final FloatingActionButton addCarButton = findViewById(R.id.addCategoryButton);
         FloatingActionButton listButton = findViewById(R.id.listButton);
         final FloatingActionButton ColorActionButton = findViewById(R.id.ColorAction);
+
         addCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,11 +116,15 @@ public class CarsCategories extends AppCompatActivity {
 
     private void setInitData() {
         //        Set Car Basic info components
+        if(currentCar!=null&&currentCar.getImg()!=null){
+            ((ImageView)findViewById(R.id.carImage)).setImageBitmap(BitmapFactory.decodeByteArray(currentCar.getImg(),0,currentCar.getImg().length));
+        }
         ((TextView) findViewById(R.id.carName)).setText(currentCar.getCarName());
         ((TextView) findViewById(R.id.carCountryOrigin)).setText(currentCar.getCountry());
         ((TextView) findViewById(R.id.hoursePower)).setText(currentCar.getHoursePower() + " H");
         ((TextView) findViewById(R.id.motorCapacity)).setText(currentCar.getMotorCapacity() + " CC");
         ((TextView) findViewById(R.id.bagSpace)).setText(currentCar.getBagSpace() + " L");
+
         this.setTitle(currentCar.getCarName());
         loadCarsCategories();
         loadCarColors();

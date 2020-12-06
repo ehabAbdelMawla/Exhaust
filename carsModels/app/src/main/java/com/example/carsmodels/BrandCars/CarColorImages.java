@@ -3,14 +3,11 @@ package com.example.carsmodels.BrandCars;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.carsmodels.ImageViewPager.FullView;
+import com.example.carsmodels.ImageViewPager.ScreenSlidePagerAdapter;
 import com.example.carsmodels.R;
 import com.example.carsmodels.dataModel.CarImage;
 import com.example.carsmodels.util.util;
@@ -26,10 +25,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class CarColorImages extends AppCompatActivity {
-
     FloatingActionButton addButton;
     String cardName;
     int relationId;
@@ -75,11 +72,22 @@ public class CarColorImages extends AppCompatActivity {
 
     private void loadImages() {
         imagesContainer.removeAllViews();
-        ArrayList<CarImage> images = util.getInstance().getCarImages(relationId);
-
-        for (CarImage imgObj : images) {
-            View ImageViewParent = View.inflate(this, R.layout.car_image_item, null);
+        ScreenSlidePagerAdapter.images = util.getInstance().getCarImages(relationId);
+        for (final CarImage imgObj : ScreenSlidePagerAdapter.images) {
+           final View ImageViewParent = View.inflate(this, R.layout.car_image_item, null);
             ((ImageView) ImageViewParent.findViewById(R.id.ImageView)).setImageBitmap(BitmapFactory.decodeByteArray(imgObj.getImg(), 0, imgObj.getImg().length));
+            final int i=imagesContainer.getChildCount();
+            ImageViewParent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent in=new Intent(CarColorImages.this, FullView.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("start",i);
+                    in.putExtras(bundle);
+                    startActivity(in);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+                }
+            });
             imagesContainer.addView(ImageViewParent);
         }
 
@@ -95,8 +103,6 @@ public class CarColorImages extends AppCompatActivity {
 
             if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
                 // Get the Image from data
-
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 if (data.getData() != null) {
                     try {
                         Uri mImageUri = data.getData();
@@ -168,10 +174,10 @@ public class CarColorImages extends AppCompatActivity {
             public void run() {
                 if (finalRepeatedImage == 0 && finalFailImage == 0) {
                     Toast.makeText(CarColorImages.this, totalImages + " Images Added Successfully", Toast.LENGTH_LONG).show();
-                } else if (finalFailImage == 0) {
+                } else if (finalRepeatedImage == 0) {
                     Toast.makeText(CarColorImages.this, (totalImages - finalFailImage) + " Images Added \n" + finalFailImage + " Faild ", Toast.LENGTH_LONG).show();
 
-                } else if (finalRepeatedImage == 0) {
+                } else if (finalFailImage == 0) {
                     Toast.makeText(CarColorImages.this, (totalImages - finalRepeatedImage) + " Images Added \n" + finalRepeatedImage + " Already Exists", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(CarColorImages.this, (totalImages - (finalRepeatedImage + finalFailImage)) + " Images Added \n" + finalRepeatedImage + " Already Exists \n" + finalFailImage + "Faild", Toast.LENGTH_LONG).show();
