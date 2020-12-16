@@ -1,5 +1,7 @@
 package com.example.carsmodels.ImageViewPager;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.os.Bundle;
 import android.transition.Fade;
 
@@ -14,22 +16,31 @@ public class FullView extends AppCompatActivity {
 
     private ViewPager mPager;
     private PagerAdapter pagerAdapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setExitTransition(new Fade());
         setContentView(R.layout.view_pager);
-        mPager=findViewById(R.id.pager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(),mPager,this);
+        mPager = findViewById(R.id.pager);
+        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), mPager, this);
         mPager.setAdapter(pagerAdapter);
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
-        mPager.setCurrentItem(b.getInt("start"),true);
+            mPager.setCurrentItem(b.getInt("start"), true);
         }
-        mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+
 
     }
+
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
 
     public PagerAdapter getPagerAdapter() {
         return pagerAdapter;

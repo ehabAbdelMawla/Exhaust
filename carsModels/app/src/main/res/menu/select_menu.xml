@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
+
+    <item
+        android:id="@+id/selectionNumber"
+        android:title="0 Selected"
+        android:orderInCategory="0"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/shareIcon"
+        android:icon="@drawable/whats_app"
+        android:title="Share"
+        android:orderInCategory="4"
+        app:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/deleteIcon"
+        android:icon="@drawable/delete"
+        android:title="Delete"
+        android:orderInCategory="5"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -26,6 +27,8 @@ public class ScreenSlidePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.image_page, container, false);
         ImageView imgView =rootView.findViewById(R.id.imageView);
+
+
         final CarImage carImage = ScreenSlidePagerAdapter.images.get(position);
         imgView.setImageBitmap(BitmapFactory.decodeByteArray(carImage.getImg(),0, carImage.getImg().length));
         rootView.findViewById(R.id.deletImageButton).setOnClickListener(new View.OnClickListener() {
@@ -36,17 +39,12 @@ public class ScreenSlidePageFragment extends Fragment {
                         .setIcon(android.R.drawable.ic_delete)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-//                                long result = temp.remove();
-//                                if (result == 1) {
-//                                    Toast.makeText(getApplicationContext(), "Brand Deleted Successfully", Toast.LENGTH_SHORT).show();
-//                                    loadModels();
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
-//                                }
-
-//                                ScreenSlidePagerAdapter.images.remove(carImage);
-                                System.out.println("aaaaaa " +position);
-
+                                long result = carImage.remove();
+                                if (result == 1) {
+                                    Toast.makeText(getContext(), "Image Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
+                                }
                                 ((ScreenSlidePagerAdapter)(((FullView)getActivity()).getPagerAdapter())).removeView();
                             }
                         })

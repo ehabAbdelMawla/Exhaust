@@ -1,6 +1,11 @@
 package com.example.carsmodels.dataModel;
 
 
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.example.carsmodels.MainActivity;
+
 public class CarImage   {
 
     private int id;
@@ -39,5 +44,15 @@ public class CarImage   {
 
     public void setImg(byte[] img) {
         this.img = img;
+    }
+
+    public long remove() {
+        try {
+            SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
+            return databaseWriteable.delete("carImages", "id=?",new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            Log.i("CarImage", "remove", e);
+        }
+        return 0;
     }
 }

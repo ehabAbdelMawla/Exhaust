@@ -113,9 +113,9 @@ public long addColorImage(int relationId,byte[] img){
 //    convert bitmap to byte array and make images compression and change scale
     public byte[] getBitmapAsByteArray(Bitmap bitmap) {
         //                Compress Image
-//        bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.50), (int)(bitmap.getHeight()*0.50), false);
+//        bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.25), (int)(bitmap.getHeight()*0.25), false);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        bitmap.compress(Bitmap.CompressFormat.WEBP, 100, outputStream);
         return outputStream.toByteArray();
     }
 

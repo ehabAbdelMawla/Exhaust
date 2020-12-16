@@ -27,11 +27,10 @@ public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
     public void removeView() {
         int delIdxVar = mPager.getCurrentItem();
         images.remove(delIdxVar);
-        if(images.size() >= 1)
-        {
+        if(images.size() >= 1){
             mPager.setAdapter(this);
             if(delIdxVar==0){
-                mPager.setCurrentItem(1,true);}
+                mPager.setCurrentItem(0,true);}
             else{
             mPager.setCurrentItem(delIdxVar-1,true);}
             notifyDataSetChanged();
