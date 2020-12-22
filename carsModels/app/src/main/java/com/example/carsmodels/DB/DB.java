@@ -64,7 +64,7 @@ public class DB extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS carImages (" +
                 "id INTEGER UNIQUE NOT NULL," +
                 "relationId INTEGER NOT NULL," +
-                "img BLOB NOT NULL," +
+                "img VARCHAR(1000) NOT NULL," +
                 "PRIMARY KEY(relationId,img)," +
                 "FOREIGN KEY(relationId) REFERENCES Car_Colors(id) ON DELETE CASCADE ON UPDATE CASCADE)");
 

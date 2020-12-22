@@ -1,12 +1,17 @@
 package com.example.carsmodels;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -26,9 +31,11 @@ import com.example.carsmodels.speceficeations.specificationSettings;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
 
     public static DB db;
     public static MainActivity MainActivityPointer;
@@ -36,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;      //image of edit Brand Pop Up
     byte[] imageBytes;
     int GET_FROM_GALLERY = 1;
-
+    private static final int GET_PERMISSIONS=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +54,22 @@ public class MainActivity extends AppCompatActivity {
         MainActivityPointer = this;
         SetButtonsAction();
 
+////        Check Required Permisttion => new Android Versions
+        if(
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
+        ||
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_DOCUMENTS)!= PackageManager.PERMISSION_GRANTED
+        ){
+            ActivityCompat.requestPermissions(this,new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.MANAGE_DOCUMENTS
+
+            },GET_PERMISSIONS);
+        }
+        
     }
+
+
 
     @Override
     protected void onStart() {
@@ -153,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
         return brands;
     }
 
-
     public void SetButtonsAction() {
 //        add Brand Button
         final FloatingActionButton addBrandButton = findViewById(R.id.addBrandButton);
@@ -216,4 +237,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
 }
