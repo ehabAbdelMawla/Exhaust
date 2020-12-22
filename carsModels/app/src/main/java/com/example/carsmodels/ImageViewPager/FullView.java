@@ -1,12 +1,16 @@
 package com.example.carsmodels.ImageViewPager;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.transition.Fade;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -16,6 +20,8 @@ public class FullView extends AppCompatActivity {
 
     private ViewPager mPager;
     private PagerAdapter pagerAdapter;
+    public static FullView obj;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +36,7 @@ public class FullView extends AppCompatActivity {
         if (b != null) {
             mPager.setCurrentItem(b.getInt("start"), true);
         }
+
 
 
     }

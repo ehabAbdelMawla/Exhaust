@@ -1,13 +1,17 @@
 package com.example.carsmodels.BrandCars;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,13 +20,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.example.carsmodels.ImageViewPager.FullView;
 import com.example.carsmodels.ImageViewPager.ScreenSlidePagerAdapter;
 import com.example.carsmodels.MainActivity;
@@ -33,10 +42,12 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -49,7 +60,6 @@ public class CarColorImages extends AppCompatActivity {
     private FlexboxLayout imagesContainer;
     private Menu menu = null;
     private boolean selectedMode = false;
-
     private Map<Integer, CarImage> selectedIds = new HashMap<>();
 
     @Override
@@ -93,12 +103,17 @@ public class CarColorImages extends AppCompatActivity {
         loadImages();
     }
 
+
     private void loadImages() {
         imagesContainer.removeAllViews();
+
         ScreenSlidePagerAdapter.images = util.getInstance().getCarImages(relationId);
         for (final CarImage imgObj : ScreenSlidePagerAdapter.images) {
             final View ImageViewParent = View.inflate(this, R.layout.car_image_item, null);
-            ((ImageView) ImageViewParent.findViewById(R.id.ImageView)).setImageBitmap(BitmapFactory.decodeByteArray(imgObj.getImg(), 0, imgObj.getImg().length));
+            Glide.with(this).load(imgObj.getImgPath()).into((ImageView) ImageViewParent.findViewById(R.id.ImageView));
+
+//            ((ImageView) ImageViewParent.findViewById(R.id.ImageView)).setImageBitmap(imgObj.getImageBitMap());
+
             final RadioButton rbtn = ImageViewParent.findViewById(R.id.selectedRadio);
             final int i = imagesContainer.getChildCount();
             ImageViewParent.setOnClickListener(new View.OnClickListener() {
@@ -128,9 +143,9 @@ public class CarColorImages extends AppCompatActivity {
 
                 }
             });
-
             imagesContainer.addView(ImageViewParent);
         }
+
     }
 
 
@@ -140,14 +155,14 @@ public class CarColorImages extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         //Detects request codes
         try {
-
             if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
                 // Get the Image from data
                 if (data.getData() != null) {
                     try {
                         Uri mImageUri = data.getData();
-                        Bitmap bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageUri);
-                        long result = util.getInstance().addColorImage(relationId, util.getInstance().getBitmapAsByteArray(bitMap));
+
+                        long result = util.getInstance().addColorImage(relationId, util.getInstance().saveToInternalStorage(this, MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri), "colorImages", relationId + "_" +util.getInstance().getMaximum("id", "carImages") + ".png"));
+//                        long result = util.getInstance().addColorImage(relationId, util.getInstance().getRealPathFromURI(this,mImageUri));
                         if (result > 0) {
                             Toast.makeText(getApplicationContext(), "Image Added Successfully", Toast.LENGTH_SHORT).show();
                         } else if (result == -1) {
@@ -156,21 +171,25 @@ public class CarColorImages extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
                         }
 
-                    } catch (FileNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        Toast.makeText(getApplicationContext(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         // TODO Auto-generated catch block
                         Toast.makeText(getApplicationContext(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
                     if (data.getClipData() != null) {
+                        final ClipData mClipData = data.getClipData();
+                        final ProgressDialog progressBar = new ProgressDialog(this);
+                        progressBar.setCanceledOnTouchOutside(false);
+                        progressBar.setCancelable(false);
+                        progressBar.setMessage("Adding Images ...");
+                        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        progressBar.setProgress(0);
+                        progressBar.setMax(mClipData.getItemCount());
+                        progressBar.show();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-
-                                ClipData mClipData = data.getClipData();
                                 final int totalImages = mClipData.getItemCount();
                                 int repeatedImage = 0, failImage = 0;
                                 long result;
@@ -178,24 +197,22 @@ public class CarColorImages extends AppCompatActivity {
                                     try {
                                         ClipData.Item item = mClipData.getItemAt(i);
                                         Uri uri = item.getUri();
-                                        Bitmap bitMap = MediaStore.Images.Media.getBitmap(CarColorImages.this.getContentResolver(), uri);
-                                        result = util.getInstance().addColorImage(relationId, util.getInstance().getBitmapAsByteArray(bitMap));
+                                        result = util.getInstance().addColorImage(relationId, util.getInstance().saveToInternalStorage(CarColorImages.this, MediaStore.Images.Media.getBitmap(CarColorImages.this.getContentResolver(), uri), "colorImages", relationId + "_" +util.getInstance().getMaximum("id", "carImages") + ".png"));
                                         if (result == -1) {
                                             repeatedImage += 1;
                                         } else if (result < 0) {
                                             failImage += 1;
                                         }
+                                        progressBar.setProgress(i + 1);
                                     } catch (Exception ex) {
                                         System.out.println("Exception " + ex);
                                     }
                                 }
-                                showToast(totalImages, repeatedImage, failImage);
+                                showToast(totalImages, repeatedImage, failImage, progressBar);
                             }
                         }).start();
                     }
                 }
-
-
             } else {
                 Toast.makeText(this, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
@@ -209,7 +226,7 @@ public class CarColorImages extends AppCompatActivity {
     }
 
     // show Toast that indicate details of Adding Multiple Images
-    public void showToast(final int totalImages, final int finalRepeatedImage, final int finalFailImage) {
+    public void showToast(final int totalImages, final int finalRepeatedImage, final int finalFailImage, final ProgressDialog progressBar) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -223,6 +240,7 @@ public class CarColorImages extends AppCompatActivity {
                 } else {
                     Toast.makeText(CarColorImages.this, (totalImages - (finalRepeatedImage + finalFailImage)) + " Images Added \n" + finalRepeatedImage + " Already Exists \n" + finalFailImage + "Faild", Toast.LENGTH_LONG).show();
                 }
+                progressBar.dismiss();
                 loadImages();   // High Cost , must fix in updates
             }
         });
@@ -257,8 +275,8 @@ public class CarColorImages extends AppCompatActivity {
                 while (itr.hasNext()) {
                     try {
                         cimg = selectedIds.get(itr.next());
-                        bitMap = BitmapFactory.decodeByteArray(cimg.getImg(), 0, cimg.getImg().length);
-                        f = new File(getExternalCacheDir() + "/" + getResources().getString(R.string.app_name)+cimg.getId() + ".png");
+                        bitMap = cimg.getImageBitMap();
+                        f = new File(getExternalCacheDir() + "/" + getResources().getString(R.string.app_name) + cimg.getId() + ".png");
                         FileOutputStream outputStream = new FileOutputStream(f);
                         bitMap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
                         outputStream.flush();

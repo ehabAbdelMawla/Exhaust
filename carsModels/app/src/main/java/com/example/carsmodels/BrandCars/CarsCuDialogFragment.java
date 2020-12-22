@@ -150,9 +150,7 @@ public class CarsCuDialogFragment extends DialogFragment {
         //Detects request codes
         if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
-            System.out.println(selectedImage);
-            System.out.println(selectedImage);
-            System.out.println(selectedImage);
+
 
             Bitmap bitmap = null;
             try {
