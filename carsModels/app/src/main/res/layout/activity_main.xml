@@ -7,10 +7,9 @@
     android:layout_height="match_parent"
     android:clickable="false"
     android:focusable="auto"
-    tools:context=".MainActivity">
+    tools:context=".Main.MainActivity">
 
     <ScrollView
-        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -86,6 +85,8 @@
         android:foregroundGravity="center"
         android:textAlignment="center"
         app:fabCustomSize="60dp"
+        android:background="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/list" />

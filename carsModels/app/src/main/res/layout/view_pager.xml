@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:id="@+id/pager"
-    tools:context=".ImageViewPager.FullView">
+    tools:context=".Cars.Images.ImageViewPager.FullView">
 
 </androidx.viewpager.widget.ViewPager>

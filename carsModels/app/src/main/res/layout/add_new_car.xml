@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BrandCars.AddNewCar">
+    tools:context=".Cars.AddNewCarActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -172,10 +172,10 @@
                     android:layout_marginEnd="113dp"
                     android:layout_marginRight="113dp"
                     android:background="@drawable/rounded_button"
-                    android:focusable="auto"
-                    android:focusableInTouchMode="true"
                     android:padding="10dp"
                     android:text="Add"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:textAllCaps="true"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"

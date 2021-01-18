@@ -1,36 +1,40 @@
 package com.example.carsmodels.util;
 
-import android.content.ContentValues;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
+import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
 
-import androidx.loader.content.CursorLoader;
+import androidx.fragment.app.Fragment;
 
-import com.example.carsmodels.BrandCars.CarsCategories;
-import com.example.carsmodels.MainActivity;
-import com.example.carsmodels.dataModel.CarCategoty;
-import com.example.carsmodels.dataModel.CarColor;
-import com.example.carsmodels.dataModel.CarImage;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.carsmodels.Main.MainActivity;
+import com.example.carsmodels.R;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.example.carsmodels.MainActivity.db;
+import static com.example.carsmodels.Main.MainActivity.db;
 
 public class util {
-
+    /**
+     * Singleton Design Pattern
+     */
     private static util util;
-
 
     public static util getInstance() {
         if (util == null) {
@@ -39,7 +43,9 @@ public class util {
         return util;
     }
 
-    //    get Value of editable Text
+    /**
+     * UI Util
+     */
     public String getVal(EditText textInput) {
         try {
             if (textInput != null) {
@@ -51,84 +57,58 @@ public class util {
         return "";
     }
 
-    public long addRelation(int carId, int colorId) {
-        try {
-            SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
-            ContentValues myValues = new ContentValues();
-            myValues.put("id", getMaximum("id", "Car_Colors"));
-            myValues.put("carId", carId);
-            myValues.put("colorId", colorId);
-            return databaseWriteable.insert("Car_Colors", null, myValues);
-        } catch (Exception e) {
-            Log.i(util.class.getName(), "addRelation", e);
+    public void setTextViewValue(TextView text, String val) {
+        text.setText(val);
+    }
+
+    public void GlideProps(RequestManager request, String imagePath, ImageView parent) {
+        request.load(imagePath)
+                .placeholder(R.drawable.loader_gif)
+                .fitCenter()
+                .error(R.drawable.image)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(parent);
+    }
+
+    public void setGlideImage(Context context, String imagePath, ImageView parent) {
+        GlideProps(Glide.with(context), imagePath, parent);
+    }
+
+    public void setGlideImage(Fragment frag, String imagePath, ImageView parent) {
+        GlideProps(Glide.with(frag), imagePath, parent);
+    }
+
+    public void setGlideImage(View view, String imagePath, ImageView parent) {
+        GlideProps(Glide.with(view), imagePath, parent);
+    }
+
+    public ProgressDialog createProgressDialog(Context context, String message, int initProgressValue, int MaxProgressValue) {
+        ProgressDialog progressBar = new ProgressDialog(context);
+        progressBar.setCanceledOnTouchOutside(false);
+        progressBar.setCancelable(false);
+        progressBar.setMessage(message);
+        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressBar.setProgress(initProgressValue);
+        progressBar.setMax(MaxProgressValue);
+        return progressBar;
+    }
+
+
+    public void shareIntent(Context context, ArrayList<Uri> imagesUri, boolean whatsAppOnly) {
+        Intent whatsappIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        if (whatsAppOnly) {
+            whatsappIntent.setPackage("com.whatsapp"); //to share With Whatsapp only
         }
-        return 0;
+        whatsappIntent.putExtra(Intent.EXTRA_STREAM, imagesUri);
+        whatsappIntent.setType("image/*");
+        whatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(Intent.createChooser(whatsappIntent, "share With..."));
     }
 
-    public ArrayList<CarColor> getCarColors(int carId) {
-        ArrayList<CarColor> data = new ArrayList<>();
-        try {
-            Cursor res = db.getReadableDatabase().rawQuery("SELECT Car_Colors.id,Car_Colors.carId,Car_Colors.colorId,colors.color FROM Car_Colors JOIN colors ON Car_Colors.carId=" + carId + " AND Car_Colors.colorId=colors.id", null);
-            while (res.moveToNext()) {
-                data.add(new CarColor(
-                        res.getInt(res.getColumnIndex("id")),
-                        res.getInt(res.getColumnIndex("carId")),
-                        res.getInt(res.getColumnIndex("colorId")),
-                        res.getString(res.getColumnIndex("color"))));
-            }
-
-        } catch (Exception e) {
-            Log.i(util.class.getName(), "getCarColors", e);
-        }
-        return data;
-    }
-
-
-    //    Add Image & Color Relation
-    public long addColorImage(int relationId, String img) {
-        try {
-            SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
-            ContentValues myValues = new ContentValues();
-            myValues.put("id", getMaximum("id", "carImages"));
-            myValues.put("relationId", relationId);
-            myValues.put("img", img);
-            return databaseWriteable.insert("carImages", null, myValues);
-        } catch (Exception e) {
-            Log.i(util.class.getName(), "addColorImage", e);
-        }
-        return 0;
-    }
-
-    //get All Relation Images
-    public ArrayList<CarImage> getCarImages(int relationId) {
-        ArrayList<CarImage> data = new ArrayList<>();
-        try {
-            Cursor res = db.getReadableDatabase().rawQuery("SELECT * FROM carImages WHERE relationId=" + relationId, null);
-            while (res.moveToNext()) {
-                data.add(new CarImage(
-                        res.getInt(res.getColumnIndex("id")),
-                        res.getInt(res.getColumnIndex("relationId")),
-                        res.getString(res.getColumnIndex("img")
-                        )));
-            }
-
-        } catch (Exception e) {
-            Log.i(util.class.getName(), "getCarColors", e);
-        }
-        return data;
-    }
-
-
-    //    convert bitmap to byte array and make images compression and change scale
-    public byte[] getBitmapAsByteArray(Bitmap bitmap) {
-        //                Compress Image
-//        bitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.25), (int)(bitmap.getHeight()*0.25), false);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.WEBP, 0, outputStream);
-        return outputStream.toByteArray();
-    }
-
-    //    get Maximum of specific number column in specific table in DB
+    /**
+     * DB
+     */
     public int getMaximum(String fName, String tabelName) {
         try {
             Cursor res = MainActivity.db.getReadableDatabase().rawQuery(String.format("SELECT MAX(%s) as id FROM %s", fName, tabelName), null);
@@ -141,34 +121,164 @@ public class util {
         return 1;
     }
 
-
-    //    Start Image
-    public String saveToInternalStorage(Context context, Bitmap bitmapImage, String folderName, String imageName) {
-        ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir(folderName, Context.MODE_PRIVATE);
-        // Create imageDir
-        File mypath = new File(directory, imageName);
-
-        FileOutputStream fos = null;
+    public void deleteImagesWithIds(String ids) {
         try {
-            fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            MainActivity.db.getWritableDatabase().execSQL(
+                    "DELETE FROM carImages WHERE id IN(" + ids + ")");
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            Log.i("CarColorImages", "deleteImagesWithIds", e);
+        }
+    }
+
+
+    public void removeNonUsedColors() {
+        try {
+            MainActivity.db.getWritableDatabase().execSQL("DELETE  FROM colors WHERE colors.id  NOT IN (SELECT colors.id from colors  JOIN Car_Colors ON colors.id=Car_Colors.colorId)");
+
+        } catch (Exception e) {
+            Log.i(util.class.getName(), "removeNonUsedColors", e);
+        }
+    }
+
+
+    /**
+     * Files
+     */
+    public String saveToInternalStorage(Context context, final Bitmap bitmapImage, String folderName, String imageName) {
+        /**
+         *         ==>   Internal Dirs
+         *         ContextWrapper cw = new ContextWrapper(context.getApplicationContext());
+         *         // path to /data/data/yourapp/app_data/imageDir
+         *         File directory = cw.getDir(folderName, Context.MODE_PRIVATE);
+         *         // Create imageDir
+         *         File mypath = new File(directory, imageName);
+         */
+
+//        External Dirs
+        final File mypath = new File(context.getExternalFilesDir("DIRECTORY_PICTURES"), imageName);
+        final FileOutputStream[] fos = new FileOutputStream[1];
+        Thread copyImage = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    fos[0] = new FileOutputStream(mypath);
+                    // Use the compress method on the BitMap object to write image to the OutputStream
+                    bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos[0]);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fos[0].close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+        });
+        copyImage.start();
+        try {
+            copyImage.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         return mypath.getAbsolutePath();
     }
 
 
+    public void removeFiles(final ArrayList<String> imagesPathsToDelete) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (String path : imagesPathsToDelete) {
+                    try {
+                        new File(path).delete();
+                    } catch (Exception e) {
+                        Log.e("util", "Exception in removeFiles()", e);
+                    }
+                }
+            }
+        }).start();
+    }
 
-//    End Image
+    public void removeFile(final String img) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    new File(img).delete();
+                } catch (Exception e) {
+                    Log.e("util", "Exception in removeFile()", e);
+                }
+            }
+        }).start();
+    }
+
+    public void removeImageRelationfiles(final Cursor res) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (res.moveToNext()) {
+                    try {
+                        new File(res.getString(res.getColumnIndex("img"))).delete();
+                    } catch (Exception e) {
+                        Log.i(util.class.getName(), "getImagesOfId", e);
+                    }
+                }
+            }
+        }).start();
+    }
+
+    public void removeResourseFiles(String sqlStatement) {
+        removeImageRelationfiles(db.getReadableDatabase().rawQuery(sqlStatement, null));
+    }
+
+    /**
+     * Help Methods
+     */
+    public Map<Integer, View> getAllSystemSpecification(Context context) {
+        Map<Integer, View> allSystemSpecification = new HashMap<>();
+        try {
+            Cursor res = db.getReadableDatabase().rawQuery("SELECT * FROM specifications", null);
+            while (res.moveToNext()) {
+                View rootView = View.inflate(context, R.layout.specification_radio_btn_item, null);
+                ((Switch) rootView.findViewById(R.id.switchItem)).setText(res.getString(res.getColumnIndex("name")));
+                setGlideImage(context, res.getString(res.getColumnIndex("img")), (ImageView) rootView.findViewById(R.id.specificationImage));
+                allSystemSpecification.put(res.getInt(res.getColumnIndex("id")), rootView);
+            }
+        } catch (Exception e) {
+            Log.i("CarCategoty", "getAllSystemSpecification", e);
+        }
+        return allSystemSpecification;
+    }
+
+    public Map<Integer, Boolean> getSpecificationsIdsOf(int id) {
+        Map<Integer, Boolean> ids = new HashMap<>();
+        try {
+            Cursor res = db.getReadableDatabase().rawQuery("SELECT specificationId FROM car_specifications WHERE categoryId=" + id, null);
+            while (res.moveToNext()) {
+                ids.put(res.getInt(res.getColumnIndex("specificationId")), true);
+            }
+        } catch (Exception e) {
+            Log.i("carCategories", "getSpecificationsIdsOf", e);
+        }
+        return ids;
+    }
+
+    public Map<Integer, String> getAllSystemSpecificationImages() {
+        Map<Integer, String> allSystemSpecification = new HashMap<>();
+        try {
+            Cursor res = db.getReadableDatabase().rawQuery("SELECT id,img FROM specifications", null);
+            while (res.moveToNext()) {
+
+                allSystemSpecification.put(res.getInt(res.getColumnIndex("id")), res.getString(res.getColumnIndex("img")));
+            }
+        } catch (Exception e) {
+            Log.i("carCategories", "getAllSystemSpecification", e);
+        }
+        return allSystemSpecification;
+    }
+
+
+
 
 }

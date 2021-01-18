@@ -3,6 +3,9 @@
     package="com.example.carsmodels">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -11,22 +14,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".Main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".addNewBrand.addNewBrandActivity" android:label="Add New Brand"/>
-        <activity android:name=".BrandCars.BrandCars" />
-        <activity android:name=".BrandCars.AddNewCar" android:label="Add New Car"/>
-        <activity android:name=".BrandCars.CarsCategories" />
-        <activity android:name=".CarCategory.AddNewCategory" android:label="Add New Category"/>
-        <activity android:name=".Colors.ColorsSettings" android:label="Colors Settings"/>
-        <activity android:name=".speceficeations.specificationSettings" android:label="Specifications Settings"/>
-        <activity android:name=".speceficeations.addNewSpecification" android:label="Add New Specification"/>
-        <activity android:name=".BrandCars.CarColorImages" android:label="Images"/>
-        <activity android:name=".ImageViewPager.FullView" android:theme="@style/FullScreen"/>
+        <activity android:name=".Brands.AddNewBrandActivity" android:label="Add New Brand"/>
+        <activity android:name=".Brands.BrandDetails" />
+        <activity android:name=".Cars.AddNewCarActivity" android:label="Add New Car"/>
+        <activity android:name=".Cars.CarsDetails" />
+        <activity android:name=".Cars.CarCategory.AddNewCategory" android:label="Add New Category"/>
+        <activity android:name=".Speceficeations.specificationSettings" android:label="Specifications Settings"/>
+        <activity android:name=".Speceficeations.addNewSpecification" android:label="Add New Specification"/>
+        <activity android:name=".Cars.Images.CarColorImages" android:label="Images"/>
+        <activity android:name=".Cars.Images.ImageViewPager.FullView" android:theme="@style/FullScreen"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+
+        </provider>
     </application>
 </manifest>

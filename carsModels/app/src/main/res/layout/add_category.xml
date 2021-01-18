@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CarCategory.AddNewCategory"
+    tools:context=".Cars.CarCategory.CategoryAddAndUpdateFragment"
     >
 
     <ScrollView
@@ -32,16 +32,15 @@
                 android:textAlignment="center" />
 
             <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/brandCarContainer"
+                android:id="@+id/specificationsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:paddingBottom="75dp"
                 android:textAlignment="center"
-                app:alignContent="center"
-                app:alignItems="center"
-                app:flexDirection="row"
-                app:flexWrap="wrap"
+                app:alignContent="flex_start"
+                app:alignItems="stretch"
+                app:flexDirection="column"
+                app:flexWrap="nowrap"
                 app:justifyContent="center">
 
             </com.google.android.flexbox.FlexboxLayout>

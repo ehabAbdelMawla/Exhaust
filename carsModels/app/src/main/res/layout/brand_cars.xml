@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BrandCars.BrandCars"
+    tools:context=".Brands.BrandDetails"
     >
 
     <ScrollView
@@ -18,7 +18,6 @@
             android:orientation="vertical" >
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/topOfPage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -114,6 +113,8 @@
         android:clickable="false"
         android:focusable="auto"
         android:foregroundGravity="center"
+        android:background="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

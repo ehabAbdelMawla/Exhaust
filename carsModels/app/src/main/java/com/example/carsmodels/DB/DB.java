@@ -15,13 +15,16 @@ public class DB extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-//       Brands Table
-        db.execSQL("CREATE TABLE IF NOT EXISTS brands (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+        /**
+         *  Brands Table
+         */
+        db.execSQL("CREATE TABLE IF NOT EXISTS brands (id INTEGER PRIMARY KEY ," +
                 "brandName VARCHAR(225) UNIQUE NOT NULL," +
                 "brandAgent VARCHAR(225) NOT NULL," +
-                "brandImage BLOB )");
-//       Cars Table
+                "brandImage VARCHAR(1000) )");
+        /**
+         * Cars Table
+         */
         db.execSQL("CREATE TABLE IF NOT EXISTS cars (" +
                 "id INTEGER UNIQUE NOT NULL," +
                 "carName VARCHAR(225)  NOT NULL," +
@@ -29,30 +32,48 @@ public class DB extends SQLiteOpenHelper {
                 "motorCapacity DOUBLE NOT NULL," +
                 "hoursePower DOUBLE NOT NULL," +
                 "bagSpace DOUBLE NOT NULL," +
-                "carImage BLOB ," +
+                "carImage VARCHAR(1000) ," +
                 "brandId INTEGER NOT NULL," +
                 "  PRIMARY KEY(carName,brandId)," +
                 " FOREIGN KEY(brandId) REFERENCES brands(id) ON DELETE CASCADE ON UPDATE CASCADE)");
-//  Cars Categories
+        /**
+         * Cars Categories Table
+         */
         db.execSQL("CREATE TABLE IF NOT EXISTS carsCategory (" +
                 "id INTEGER UNIQUE NOT NULL," +
                 "categoryName VARCHAR(225)  NOT NULL," +
                 "carId INTEGER NOT NULL," +
                 "  PRIMARY KEY(categoryName,carId)," +
                 " FOREIGN KEY(carId) REFERENCES cars(id) ON DELETE CASCADE ON UPDATE CASCADE)");
-
-
-        //  System Specification
+        /**
+         * All Specification
+         */
         db.execSQL("CREATE TABLE IF NOT EXISTS specifications (" +
-                "id INTEGER  PRIMARY KEY AUTOINCREMENT," +
-                "name VARCHAR(225) UNIQUE NOT NULL,img BLOB UNIQUE NOT NULL)");
+                "id INTEGER  PRIMARY KEY ," +
+                "name VARCHAR(225) UNIQUE NOT NULL," +
+                "img VARCHAR(1000) UNIQUE NOT NULL)");
 
-        //  All Colors
+
+        /**
+         * car_specifications
+         */
+        db.execSQL("CREATE TABLE IF NOT EXISTS car_specifications (" +
+                "id INTEGER  UNIQUE NOT NULL," +
+                "categoryId INTEGER  NOT NULL," +
+                "specificationId INTEGER  NOT NULL," +
+                "PRIMARY KEY(categoryId,specificationId)," +
+                "FOREIGN KEY(categoryId) REFERENCES carsCategory(id) ON DELETE CASCADE ON UPDATE CASCADE," +
+                "FOREIGN KEY(specificationId) REFERENCES specifications(id) ON DELETE CASCADE ON UPDATE CASCADE)");
+        /**
+         * All Colors
+         */
         db.execSQL("CREATE TABLE IF NOT EXISTS colors (" +
                 "id INTEGER  PRIMARY KEY NOT NULL," +
                 "color VARCHAR(225) UNIQUE NOT NULL)");
 
-        //  Car_Colors
+        /**
+         *  Car_Colors
+         */
         db.execSQL("CREATE TABLE IF NOT EXISTS Car_Colors (" +
                 "id INTEGER  UNIQUE NOT NULL," +
                 "carId INTEGER  NOT NULL," +
@@ -60,7 +81,9 @@ public class DB extends SQLiteOpenHelper {
                 "PRIMARY KEY(carId,colorId)," +
                 "FOREIGN KEY(carId) REFERENCES cars(id) ON DELETE CASCADE ON UPDATE CASCADE," +
                 "FOREIGN KEY(colorId) REFERENCES colors(id) ON DELETE CASCADE ON UPDATE CASCADE)");
-//      Cars Color Images
+        /**
+         *  Cars Color Images
+         */
         db.execSQL("CREATE TABLE IF NOT EXISTS carImages (" +
                 "id INTEGER UNIQUE NOT NULL," +
                 "relationId INTEGER NOT NULL," +
@@ -76,17 +99,19 @@ public class DB extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS cars");
         db.execSQL("DROP TABLE IF EXISTS carsCategory");
         db.execSQL("DROP TABLE IF EXISTS specifications");
+        db.execSQL("DROP TABLE IF EXISTS car_specifications");
         db.execSQL("DROP TABLE IF EXISTS colors");
         db.execSQL("DROP TABLE IF EXISTS Car_Colors");
         db.execSQL("DROP TABLE IF EXISTS CarImages");
         onCreate(db);
-
     }
 
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-        //     Open FOREIGN Support
+        /**
+         * To Support Foreign keys
+         */
         db.execSQL("PRAGMA foreign_keys=ON;");
     }
 }
