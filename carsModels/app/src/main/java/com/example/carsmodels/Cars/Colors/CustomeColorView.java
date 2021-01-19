@@ -16,6 +16,7 @@ import com.example.carsmodels.Cars.Images.CarColorImages;
 import com.example.carsmodels.DataModel.CarColor;
 import com.example.carsmodels.R;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
+import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -87,32 +88,29 @@ public class CustomeColorView extends ConstraintLayout implements View.OnClickLi
 
     @Override
     public boolean onLongClick(View v) {
-        final AlertDialog.Builder alertDialogBuilde = new AlertDialog.Builder(this.getContext());
-        final View popUpView = inflate(this.getContext(), R.layout.edit_delete_popup, null);
-        alertDialogBuilde.setView(popUpView);
-        final AlertDialog alert = alertDialogBuilde.create();
-        alert.show();
-        popUpView.findViewById(R.id.editIcon).setOnClickListener(new View.OnClickListener() {
+
+        new EditOrDeleteDialog(getContext()) {
             @Override
             public void onClick(View v) {
-                alert.cancel();
-                new AddNewColorOrSelectPrevOneDialogFragment(carId, colorObj.getRealtionId(), colorObj.getColorId(), CustomeColorView.this).show(CustomeColorView.this.activity.getSupportFragmentManager(), "updateColor");
+                switch (v.getId()) {
+                    case R.id.editIcon:
+                        this.cancel();
+                        new AddNewColorOrSelectPrevOneDialogFragment(carId, colorObj.getRealtionId(), colorObj.getColorId(), CustomeColorView.this).show(CustomeColorView.this.activity.getSupportFragmentManager(), "updateColor");
+                        break;
+                    case R.id.deleteIcon:
+                        this.cancel();
+                        new ConfirmDialog(CustomeColorView.this.getContext(), "Delete Color?", android.R.drawable.ic_delete) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                CarColor.removeRelation(colorObj.getRealtionId());
+                                Toast.makeText(CustomeColorView.this.getContext(), "Color Deleted Successfully", Toast.LENGTH_LONG).show();
+                                ((FlexboxLayout) CustomeColorView.this.getParent()).removeView(CustomeColorView.this);
+                            }
+                        }.show();
+                        break;
+                }
             }
-        });
-        popUpView.findViewById(R.id.deleteIcon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alert.cancel();
-                new ConfirmDialog(CustomeColorView.this.getContext(), "Delete Color?", android.R.drawable.ic_delete) {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        CarColor.removeRelation(colorObj.getRealtionId());
-                        Toast.makeText(CustomeColorView.this.getContext(), "Color Deleted Successfully", Toast.LENGTH_LONG).show();
-                        ((FlexboxLayout) CustomeColorView.this.getParent()).removeView(CustomeColorView.this);
-                    }
-                }.show();
-            }
-        });
+        }.show();
         return true;
     }
 }

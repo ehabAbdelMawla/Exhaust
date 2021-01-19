@@ -16,6 +16,7 @@ import com.example.carsmodels.Cars.CarsDetails;
 import com.example.carsmodels.DataModel.CarColor;
 import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.Color;
+import com.example.carsmodels.util.AnimatedFragment;
 import com.example.carsmodels.util.util;
 import com.flask.colorpicker.ColorPickerView;
 import com.google.android.flexbox.FlexboxLayout;
@@ -23,7 +24,7 @@ import com.google.android.flexbox.FlexboxLayout;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class AddNewColorOrSelectPrevOneDialogFragment extends DialogFragment {
+public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
 
     /**
      * Variables Declaration

@@ -21,14 +21,14 @@
             android:id="@+id/modelsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:paddingBottom="75dp"
             android:textAlignment="center"
+            app:justifyContent="center"
             app:alignContent="center"
             app:alignItems="center"
             app:flexDirection="row"
             app:flexWrap="wrap"
-            app:justifyContent="center">
+         >
 
         </com.google.android.flexbox.FlexboxLayout>
     </ScrollView>

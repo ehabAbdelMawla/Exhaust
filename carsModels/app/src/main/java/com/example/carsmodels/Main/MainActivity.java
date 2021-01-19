@@ -1,11 +1,9 @@
 package com.example.carsmodels.Main;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,14 +22,18 @@ import com.example.carsmodels.Brands.BrandAddAndUpdateFragment;
 import com.example.carsmodels.Brands.AddNewBrandActivity;
 import com.example.carsmodels.DataModel.Brand;
 import com.example.carsmodels.Speceficeations.specificationSettings;
+import com.example.carsmodels.util.AnimatedActivity;
+import com.example.carsmodels.util.CloseLoaderThread;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
+import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
+import com.example.carsmodels.util.Loader.Loader;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AnimatedActivity {
 
     /**
      * Class Attributes
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private FlexboxLayout modelsContainer;
     private int GET_NEW_BRAND_OBJECT = 500;
+    private Loader loaderDialog;
 
     /**
      * Activity LifeCycle Events
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         db = new DB(this);
         modelsContainer = findViewById(R.id.modelsContainer);
+        loaderDialog = new Loader(this);
         loadBrands();
         SetButtonsAction();
     }
@@ -87,8 +91,7 @@ public class MainActivity extends AppCompatActivity {
         addBrandButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent AddNewBrandIntent = new Intent(MainActivity.this, AddNewBrandActivity.class);
-                startActivityForResult(AddNewBrandIntent, GET_NEW_BRAND_OBJECT);
+                startActivityForResult(new Intent(MainActivity.this, AddNewBrandActivity.class), GET_NEW_BRAND_OBJECT);
             }
         });
 
@@ -97,8 +100,7 @@ public class MainActivity extends AppCompatActivity {
         specButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addSpecificationObject = new Intent(MainActivity.this, specificationSettings.class);
-                startActivity(addSpecificationObject);
+                startActivity(new Intent(MainActivity.this, specificationSettings.class));
             }
         });
 
@@ -149,18 +151,23 @@ public class MainActivity extends AppCompatActivity {
      */
     public void loadBrands() {
         modelsContainer.removeAllViews();
-        ArrayList<Brand> brands = getAllBrands();
-        for (final Brand brand : brands) {
-            addBrand(brand);
-        }
+        final ArrayList<Brand> brands = getAllBrands();
+        loaderDialog.displayLoader();
+        Thread addBrands = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (final Brand brand : brands) {
+                    addBrand(brand);
+                }
+            }
+        });
+        new CloseLoaderThread(addBrands,loaderDialog).start();
     }
 
     public void addBrand(final Brand brand) {
         final View brandView = View.inflate(MainActivity.this, R.layout.model_box, null);
         ((TextView) brandView.findViewById(R.id.modelName)).setText(brand.getBrandName());
-        if (brand.getImg() != null && !brand.getImg().trim().equals("")) {
-            util.getInstance().setGlideImage(this, brand.getImg(), (ImageView) brandView.findViewById(R.id.modelImage));
-        }
+
 
         brandView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,49 +182,52 @@ public class MainActivity extends AppCompatActivity {
         brandView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                final AlertDialog.Builder alertDialogBuilde = new AlertDialog.Builder(MainActivity.this);
-                final View popUpView = getLayoutInflater().inflate(R.layout.edit_delete_popup, null);
-                alertDialogBuilde.setView(popUpView);
-                final AlertDialog alert = alertDialogBuilde.create();
-                alert.show();
-                popUpView.findViewById(R.id.editIcon).setOnClickListener(new View.OnClickListener() {
+                new EditOrDeleteDialog(MainActivity.this) {
                     @Override
                     public void onClick(View v) {
-                        alert.cancel();
-                        new BrandAddAndUpdateFragment(brand, brandView).show(getSupportFragmentManager(), "edit_Brand");
-                    }
-                });
-                popUpView.findViewById(R.id.deleteIcon).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alert.cancel();
-                        new ConfirmDialog(MainActivity.this, "Delete Brand?", "All cars,images and Categories will deleted too.", android.R.drawable.ic_delete) {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                util.getInstance().removeResourseFiles("SELECT brands.id,carImages.img FROM carImages " +
-                                        " JOIN brands JOIN cars JOIN Car_Colors " +
-                                        " ON  cars.brandId= brands.id " +
-                                        " AND carImages.relationId=Car_Colors.id " +
-                                        " AND cars.id=Car_Colors.carId " +
-                                        " AND brands.id=" + brand.getId());
+                        switch (v.getId()) {
+                            case R.id.editIcon:
+                                this.cancel();
+                                new BrandAddAndUpdateFragment(brand, brandView).show(getSupportFragmentManager(), "edit_Brand");
+                                break;
+                            case R.id.deleteIcon:
+                                this.cancel();
+                                new ConfirmDialog(MainActivity.this, R.string.delete_brand_dialog_title, R.string.delete_brand_dialog_msg, android.R.drawable.ic_delete) {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        util.getInstance().removeResourseFiles("SELECT brands.id,carImages.img FROM carImages " +
+                                                " JOIN brands JOIN cars JOIN Car_Colors " +
+                                                " ON  cars.brandId= brands.id " +
+                                                " AND carImages.relationId=Car_Colors.id " +
+                                                " AND cars.id=Car_Colors.carId " +
+                                                " AND brands.id=" + brand.getId());
 
-                                long result = brand.remove();
-                                if (result == 1) {
-                                    Toast.makeText(getApplicationContext(), "Brand Deleted Successfully", Toast.LENGTH_SHORT).show();
-                                    ((FlexboxLayout) brandView.getParent()).removeView(brandView);
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }.show();
-
+                                        long result = brand.remove();
+                                        if (result == 1) {
+                                            Toast.makeText(getApplicationContext(), R.string.delete_brand_success_msg, Toast.LENGTH_SHORT).show();
+                                            ((FlexboxLayout) brandView.getParent()).removeView(brandView);
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }.show();
+                                break;
+                        }
                     }
-                });
+                }.show();
                 return true;
             }
         });
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (brand.getImg() != null && !brand.getImg().trim().equals("")) {
+                    util.getInstance().setGlideImage(MainActivity.this, brand.getImg(), (ImageView) brandView.findViewById(R.id.modelImage));
+                }
+                modelsContainer.addView(brandView);
+            }
+        });
 
-        modelsContainer.addView(brandView);
     }
 
     public ArrayList<Brand> getAllBrands() {

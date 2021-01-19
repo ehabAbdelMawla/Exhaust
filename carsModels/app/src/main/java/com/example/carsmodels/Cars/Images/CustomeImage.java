@@ -2,6 +2,9 @@ package com.example.carsmodels.Cars.Images;
 
 
 import android.content.Context;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
@@ -11,7 +14,7 @@ import com.example.carsmodels.DataModel.CarImage;
 import com.example.carsmodels.R;
 
 
-public class CustomeImage extends ConstraintLayout {
+public class CustomeImage extends ConstraintLayout  {
     /**
      * Variables Declarations
      */
@@ -19,6 +22,8 @@ public class CustomeImage extends ConstraintLayout {
     private CarImage carImageObj;
     private RadioButton radioButton;
     private ImageView image;
+
+
 
     /**
      * @param context     : context that hold Image
@@ -33,7 +38,10 @@ public class CustomeImage extends ConstraintLayout {
         this.image = this.findViewById(R.id.ImageView);
         this.index = index;
         this.carImageObj = carImageObj;
+
+
     }
+
 
     public int getIndex() {
         return index;
@@ -68,4 +76,8 @@ public class CustomeImage extends ConstraintLayout {
     }
 
 
+
 }
+
+
+

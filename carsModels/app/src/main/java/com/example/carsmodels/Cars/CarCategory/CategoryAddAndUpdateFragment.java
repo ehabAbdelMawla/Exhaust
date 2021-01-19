@@ -18,6 +18,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.carsmodels.Cars.CarsDetails;
 import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.CarCategoty;
+import com.example.carsmodels.util.AnimatedFragment;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -25,7 +26,7 @@ import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
-public class CategoryAddAndUpdateFragment extends DialogFragment {
+public class CategoryAddAndUpdateFragment extends AnimatedFragment {
     /**
      * Declare Instance Variables
      */

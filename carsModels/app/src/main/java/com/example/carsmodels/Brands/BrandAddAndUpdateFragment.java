@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,9 +19,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.carsmodels.Main.MainActivity;
 import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.Brand;
+import com.example.carsmodels.util.AnimatedFragment;
+import com.example.carsmodels.util.CloseLoaderThread;
 import com.example.carsmodels.util.Loader.Loader;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
@@ -30,7 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
-public class BrandAddAndUpdateFragment extends DialogFragment {
+public class BrandAddAndUpdateFragment extends AnimatedFragment {
     /**
      * Instance Attributes
      */
@@ -86,7 +91,7 @@ public class BrandAddAndUpdateFragment extends DialogFragment {
             }
             brandNameText.setText(brand.getBrandName());
             brandAgentText.setText(brand.getBrandAgent());
-            addButton.setText("Update");
+            addButton.setText(R.string.update);
         }
 
         /**
@@ -96,43 +101,69 @@ public class BrandAddAndUpdateFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (utilMethods.getVal(brandNameText).equals("")) {
-                    Toast.makeText(getActivity(), "Brand Name is Required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.brand_name_required_msg, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (utilMethods.getVal(brandAgentText).equals("")) {
-                    Toast.makeText(getActivity(), "Brand Agent is Required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.brand_agent_required_msg, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 loaderDialog.displayLoader();
-                Brand newBrand = new Brand(util.getInstance().getMaximum("id","brands"),utilMethods.getVal(brandNameText), utilMethods.getVal(brandAgentText), bitmap == null ? "" : util.getInstance().saveToInternalStorage(BrandAddAndUpdateFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"));
-                if (updateMode) {
-                    newBrand.setId(brand.getId());
-                    if (bitmap != null) { //he change Image
-                        util.getInstance().removeFile(brand.getImg());
-                    } else {
-                        newBrand.setImg(brand.getImg());
-                    }
-                }
-                long operationResult = updateMode ? newBrand.update() : newBrand.insert();
-                if (operationResult > 0) {
-                    Toast.makeText(getActivity(), updateMode ? "Brand Updated Successfully" : "Brand Added Successfully", Toast.LENGTH_SHORT).show();
-                    if (getDialog() != null) {
-                        getDialog().dismiss();
-                        ((FlexboxLayout) brandView.getParent()).removeView(brandView);
-                        ((MainActivity) getActivity()).addBrand(newBrand);
+                final Thread addOrUpdate=new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Brand newBrand = new Brand(util.getInstance().getMaximum("id", "brands"), utilMethods.getVal(brandNameText), utilMethods.getVal(brandAgentText), bitmap == null ? "" : util.getInstance().saveToInternalStorage(BrandAddAndUpdateFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"));
+                        if (updateMode) {
+                            newBrand.setId(brand.getId());
+                            if (bitmap != null) { //he change Image
+                                util.getInstance().removeFile(brand.getImg());
+                            } else {
+                                newBrand.setImg(brand.getImg());
+                            }
+                        }
+                        long operationResult = updateMode ? newBrand.update() : newBrand.insert();
+                        if (operationResult > 0) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), updateMode ? R.string.update_brand_success_msg : R.string.add_brand_success_msg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
-                    } else {
-                        Intent newBrandIntent=new Intent();
-                        newBrandIntent.putExtra("newBrand",newBrand);
-                        getActivity().setResult(Activity.RESULT_OK,newBrandIntent);
-                        getActivity().finish();
+                            if (getDialog() != null) {
+                                getDialog().dismiss();
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ((FlexboxLayout) brandView.getParent()).removeView(brandView);
+                                        ((MainActivity) getActivity()).addBrand(newBrand);
+                                    }
+                                });
+                            } else {
+                                Intent newBrandIntent = new Intent();
+                                newBrandIntent.putExtra("newBrand", newBrand);
+                                getActivity().setResult(Activity.RESULT_OK, newBrandIntent);
+                                getActivity().finish();
+                            }
+                        } else if ((!updateMode && operationResult == -1) || (updateMode && operationResult == 0)) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), R.string.duplicate_brand_error_msg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
-                } else if ((!updateMode && operationResult == -1) || (updateMode && operationResult == 0)) {
-                    Toast.makeText(getActivity(), "Brand Already Exist!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
-                }
-                loaderDialog.dismissLoader();
+                });
+
+                new CloseLoaderThread(addOrUpdate,loaderDialog).start();
             }
         });
 
@@ -158,11 +189,11 @@ public class BrandAddAndUpdateFragment extends DialogFragment {
             } catch (FileNotFoundException e) {
                 bitmap = null;
                 imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getActivity(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 bitmap = null;
                 imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getActivity(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
             }
         }
     }

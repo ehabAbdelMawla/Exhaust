@@ -21,7 +21,9 @@ import com.example.carsmodels.Main.MainActivity;
 import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.Brand;
 import com.example.carsmodels.DataModel.Car;
+import com.example.carsmodels.util.AnimatedActivity;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
+import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 import static com.example.carsmodels.Main.MainActivity.db;
 
 
-public class BrandDetails extends AppCompatActivity {
+public class BrandDetails extends AnimatedActivity {
     /**
      * Class Variables Declarations
      */
@@ -124,39 +126,33 @@ public class BrandDetails extends AppCompatActivity {
                 modelLayOut.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        final AlertDialog.Builder alertDialogBuilde = new AlertDialog.Builder(BrandDetails.this);
-                        final View popUpView = getLayoutInflater().inflate(R.layout.edit_delete_popup, null);
-                        alertDialogBuilde.setView(popUpView);
-                        final AlertDialog alert = alertDialogBuilde.create();
-                        alert.show();
-                        popUpView.findViewById(R.id.editIcon).setOnClickListener(new View.OnClickListener() {
+                        new EditOrDeleteDialog(BrandDetails.this) {
                             @Override
                             public void onClick(View v) {
-                                alert.cancel();
-                                new CarsAddAndUpdateFragment(currentObj, modelLayOut).show(getSupportFragmentManager(), "edit_car");
+                                switch (v.getId()) {
+                                    case R.id.editIcon:
+                                        this.cancel();
+                                        new CarsAddAndUpdateFragment(currentObj, modelLayOut).show(getSupportFragmentManager(), "edit_car");
+                                        break;
+                                    case R.id.deleteIcon:
+                                        this.cancel();
+                                        new ConfirmDialog(BrandDetails.this, R.string.delete_car_dialog_title, R.string.delete_car_dialog_msg, android.R.drawable.ic_delete) {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                util.getInstance().removeResourseFiles("SELECT carImages.img FROM carImages JOIN Car_Colors ON Car_Colors.carId=" + currentObj.getId() + " AND carImages.relationId=Car_Colors.id");
+                                                long result = currentObj.remove();
+                                                if (result == 1) {
+                                                    Toast.makeText(getApplicationContext(), R.string.delete_car_success_msg, Toast.LENGTH_SHORT).show();
+                                                    ((FlexboxLayout) modelLayOut.getParent()).removeView(modelLayOut);
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }.show();
+                                        break;
+                                }
                             }
-                        });
-
-                        popUpView.findViewById(R.id.deleteIcon).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alert.cancel();
-
-                                new ConfirmDialog(BrandDetails.this, "Delete Car?", "Car Categories,Colors And images Will Deleted too ", android.R.drawable.ic_delete) {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        util.getInstance().removeResourseFiles("SELECT carImages.img FROM carImages JOIN Car_Colors ON Car_Colors.carId=" + currentObj.getId() + " AND carImages.relationId=Car_Colors.id");
-                                        long result = currentObj.remove();
-                                        if (result == 1) {
-                                            Toast.makeText(getApplicationContext(), "Car Deleted Successfully", Toast.LENGTH_SHORT).show();
-                                            ((FlexboxLayout) modelLayOut.getParent()).removeView(modelLayOut);
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }.show();
-                            }
-                        });
+                        }.show();
                         return true;
                     }
                 });

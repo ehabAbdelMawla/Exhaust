@@ -24,6 +24,7 @@ import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.Car;
 import com.example.carsmodels.DataModel.CarCategoty;
 import com.example.carsmodels.DataModel.CarColor;
+import com.example.carsmodels.util.AnimatedActivity;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +35,7 @@ import java.util.Map;
 
 import static com.example.carsmodels.Main.MainActivity.db;
 
-public class CarsDetails extends AppCompatActivity  {
+public class CarsDetails extends AnimatedActivity {
     /**
      * Class Variables Declarations
      */

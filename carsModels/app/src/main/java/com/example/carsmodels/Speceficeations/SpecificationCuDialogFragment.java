@@ -25,6 +25,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.carsmodels.Cars.Images.CarColorImages;
 import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.Specification;
+import com.example.carsmodels.util.AnimatedFragment;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +35,7 @@ import java.io.IOException;
 import java.util.Date;
 
 
-public class SpecificationCuDialogFragment extends DialogFragment {
+public class SpecificationCuDialogFragment extends AnimatedFragment {
     /**
      * Instance Variables Declarations
      */

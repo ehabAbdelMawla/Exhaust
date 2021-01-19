@@ -1,3 +1,36 @@
 <resources>
+
     <string name="app_name">Ahmed</string>
+    <!-- Start Brand Section    -->
+    <!--UI-->
+    <string name="add_brand_label">Add New Brand</string>
+    <string name="brand_name_placeholder">Brand Name</string>
+    <string name="brand_agent_placeholder">Agent Name</string>
+    <!--  Delete  -->
+    <string name="delete_brand_dialog_title">Delete Brand?</string>
+    <string name="delete_brand_dialog_msg">All cars,images and Categories will deleted too.</string>
+    <string name="delete_brand_success_msg">Brand Deleted Successfully</string>
+    <!--  Add  -->
+    <string name="brand_name_required_msg">Brand Name is Required</string>
+    <string name="brand_agent_required_msg">Brand Agent is Required</string>
+    <string name="add_brand_success_msg">Brand Added Successfully</string>
+    <!--  Update  -->
+    <string name="update_brand_success_msg">Brand Updated Successfully</string>
+
+    <string name="duplicate_brand_error_msg">Brand Already Exist!</string>
+
+    <!-- End Brand Section    -->
+    <!-- Start Car Section    -->
+    <!--  Delete  -->
+    <string name="delete_car_dialog_title">Delete Car?</string>
+    <string name="delete_car_dialog_msg">Car Categories,Colors And images Will Deleted too </string>
+    <string name="delete_car_success_msg">Car Deleted Successfully</string>
+    <!-- End Car Section    -->
+
+
+    <!--    General  -->
+    <string name="uncatched_error">Uncatched Error</string>
+    <string name="image_file_does_notExists">Error ,Cannot Load Image</string>
+    <string name="add">Add</string>
+    <string name="update">Update</string>
 </resources>

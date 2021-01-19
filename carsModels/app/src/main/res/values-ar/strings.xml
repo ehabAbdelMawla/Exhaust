@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">احمد</string>
+    <!-- Start Brand Section    -->
+    <!--UI-->
+    <string name="add_brand_label">اضافة نوع جديد</string>
+    <string name="brand_name_placeholder">الاسم</string>
+    <string name="brand_agent_placeholder">اسم الوكيل</string>
+    <!--  Delete  -->
+    <string name="delete_brand_dialog_title">حذف النوع؟</string>
+    <string name="delete_brand_dialog_msg">كل السيارات والفئات سيتم حذفها ايضاً</string>
+    <string name="delete_brand_success_msg">تم حذف النوع بنجاح</string>
+    <!--  Add  -->
+    <string name="brand_name_required_msg">يجب ادخال الاسم</string>
+    <string name="brand_agent_required_msg">يجب ادخال اسم الوكيل</string>
+    <string name="add_brand_success_msg">تم اضافة النوع بنجاح</string>
+    <!--  Update  -->
+    <string name="update_brand_success_msg">تم تعديل النزع بنجاح</string>
+
+    <string name="duplicate_brand_error_msg">هذا النوع موجود بالفعل</string>
+
+    <!-- End Brand Section    -->
+    <!-- Start Car Section    -->
+    <!--  Delete  -->
+    <string name="delete_car_dialog_title">حذف السيارة؟</string>
+    <string name="delete_car_dialog_msg">فئات السيارة, الوانها و صورها سيتم حذفها ايضاً</string>
+    <string name="delete_car_success_msg">تم حذف السيارة بنجاح</string>
+    <!-- End Car Section    -->
+
+    <!--    General -->
+    <string name="uncatched_error">حدث خطأ</string>
+    <string name="image_file_does_notExists">خطأ,لا يمكن تحميل الصورة  </string>
+    <string name="add">اضافة</string>
+    <string name="update">تعديل</string>
+</resources>

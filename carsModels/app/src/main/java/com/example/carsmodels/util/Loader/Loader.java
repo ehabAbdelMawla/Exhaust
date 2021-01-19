@@ -19,6 +19,7 @@ public class Loader {
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
+
     }
 
 

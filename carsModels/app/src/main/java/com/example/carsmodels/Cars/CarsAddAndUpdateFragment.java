@@ -22,6 +22,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.carsmodels.Brands.BrandDetails;
 import com.example.carsmodels.DataModel.Car;
 import com.example.carsmodels.R;
+import com.example.carsmodels.util.AnimatedFragment;
 import com.example.carsmodels.util.Loader.Loader;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
@@ -33,7 +34,7 @@ import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
-public class CarsAddAndUpdateFragment extends DialogFragment {
+public class CarsAddAndUpdateFragment extends AnimatedFragment {
 
     /**
      * Instance Attributes
@@ -62,6 +63,8 @@ public class CarsAddAndUpdateFragment extends DialogFragment {
         this.car = car;
         this.carView = carView;
     }
+
+
 
     @Nullable
     @Override

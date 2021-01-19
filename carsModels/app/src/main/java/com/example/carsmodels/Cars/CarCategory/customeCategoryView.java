@@ -16,6 +16,7 @@ import com.example.carsmodels.Cars.CarsDetails;
 import com.example.carsmodels.DataModel.CarCategoty;
 import com.example.carsmodels.R;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
+import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 
@@ -42,7 +43,7 @@ public class customeCategoryView extends ConstraintLayout implements View.OnLong
             sepecificationImagesContainer.addView(imageViewConatiner);
         }
 
-     setOnLongClickListener(this);
+        setOnLongClickListener(this);
 
     }
 
@@ -72,38 +73,32 @@ public class customeCategoryView extends ConstraintLayout implements View.OnLong
 
     @Override
     public boolean onLongClick(View v) {
-        final AlertDialog.Builder alertDialogBuilde = new AlertDialog.Builder(getContext());
-        final View popUpView = View.inflate(getContext(), R.layout.edit_delete_popup, null);
-        alertDialogBuilde.setView(popUpView);
-        final AlertDialog alert = alertDialogBuilde.create();
-        alert.show();
-        popUpView.findViewById(R.id.editIcon).setOnClickListener(new View.OnClickListener() {
+        new EditOrDeleteDialog(getContext()) {
             @Override
             public void onClick(View v) {
-                alert.cancel();
-                new CategoryAddAndUpdateFragment(customeCategoryView.this, sepcIds).show(parentActivity.getSupportFragmentManager(), "edit_carCategory");
+                switch (v.getId()) {
+                    case R.id.editIcon:
+                        this.cancel();
+                        new CategoryAddAndUpdateFragment(customeCategoryView.this, sepcIds).show(parentActivity.getSupportFragmentManager(), "edit_carCategory");
+                        break;
+                    case R.id.deleteIcon:
+                        this.cancel();
+                        new ConfirmDialog(parentActivity, "Delete Category?", android.R.drawable.ic_delete) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                long result = category.remove();
+                                if (result == 1) {
+                                    Toast.makeText(parentActivity, "Category Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                    ((FlexboxLayout) customeCategoryView.this.getParent()).removeView(customeCategoryView.this);
+                                } else {
+                                    Toast.makeText(parentActivity, "Uncatched Error ", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }.show();
+                        break;
+                }
             }
-        });
-        popUpView.findViewById(R.id.deleteIcon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alert.cancel();
-                new ConfirmDialog(parentActivity, "Delete Category?", android.R.drawable.ic_delete) {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        long result = category.remove();
-                        if (result == 1) {
-                            Toast.makeText(parentActivity, "Category Deleted Successfully", Toast.LENGTH_SHORT).show();
-                            ((FlexboxLayout) customeCategoryView.this.getParent()).removeView(customeCategoryView.this);
-                        } else {
-                            Toast.makeText(parentActivity, "Uncatched Error ", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }.show();
-
-
-            }
-        });
+        }.show();
         return true;
     }
 }

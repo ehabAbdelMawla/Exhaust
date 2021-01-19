@@ -3,7 +3,10 @@ package com.example.carsmodels.Cars.Images.ImageViewPager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,6 +18,7 @@ import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.CarImage;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
 import com.example.carsmodels.util.util;
+import com.github.chrisbanes.photoview.PhotoView;
 
 public class ScreenSlidePageFragment extends Fragment {
     /**
@@ -23,8 +27,8 @@ public class ScreenSlidePageFragment extends Fragment {
     private int position;
 
 
+
     public ScreenSlidePageFragment(int position) {
-        System.out.println("position: " + position);
         this.position = position;
     }
 
@@ -33,7 +37,7 @@ public class ScreenSlidePageFragment extends Fragment {
         // .... inflate layout ....
         final View rootView = inflater.inflate(R.layout.image_page, container, false);
         // .... Map Components ....
-        final ImageView imgView = rootView.findViewById(R.id.imageView);
+        PhotoView imgView = rootView.findViewById(R.id.imageView);
         // .... get Object  ....
         final CarImage carImage = ScreenSlidePagerAdapter.images.get(position).getCarImageObj();
         // .... Load Image  ....
@@ -60,7 +64,6 @@ public class ScreenSlidePageFragment extends Fragment {
 
         return rootView;
     }
-
 
 }
 

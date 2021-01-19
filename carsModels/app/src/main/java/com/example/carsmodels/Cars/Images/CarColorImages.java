@@ -22,9 +22,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.daimajia.androidanimations.library.zooming_entrances.ZoomInAnimator;
 import com.example.carsmodels.Cars.Images.ImageViewPager.FullView;
 import com.example.carsmodels.Cars.Images.ImageViewPager.ScreenSlidePagerAdapter;
 import com.example.carsmodels.Cars.Images.ImagesThreads.AddImageThread;
+import com.example.carsmodels.util.AnimatedActivity;
+import com.example.carsmodels.util.CloseLoaderThread;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
 import com.example.carsmodels.util.Loader.Loader;
 import com.example.carsmodels.R;
@@ -43,7 +46,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class CarColorImages extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
+public class CarColorImages extends AnimatedActivity implements View.OnClickListener, View.OnLongClickListener {
     /**
      * Variables Declarations
      */
@@ -245,20 +248,7 @@ public class CarColorImages extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
-
-        Thread dismissLoaderOnLoadingFinished = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    loadImagesThread.start();
-                    loadImagesThread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                loaderDialog.dismissLoader();
-            }
-        });
-        dismissLoaderOnLoadingFinished.start();
+        new CloseLoaderThread(loadImagesThread,loaderDialog).start();
     }
 
     /**
@@ -430,7 +420,7 @@ public class CarColorImages extends AppCompatActivity implements View.OnClickLis
                     bundle.putInt("start", obj.getIndex());
                     in.putExtras(bundle);
                     startActivity(in);
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_in);
+
                 } else {
                     selectImage(obj);
                 }

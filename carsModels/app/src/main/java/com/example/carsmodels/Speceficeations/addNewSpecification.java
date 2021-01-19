@@ -7,10 +7,12 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.carsmodels.util.AnimatedActivity;
+
 /**
  * This Activity just hold add & Update Specification Fragment
  */
-public class addNewSpecification extends AppCompatActivity {
+public class addNewSpecification extends AnimatedActivity {
 
 private final int mainLayoutId=100;
     @Override

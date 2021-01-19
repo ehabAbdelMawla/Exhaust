@@ -79,9 +79,12 @@ public class util {
         GlideProps(Glide.with(frag), imagePath, parent);
     }
 
+
     public void setGlideImage(View view, String imagePath, ImageView parent) {
         GlideProps(Glide.with(view), imagePath, parent);
     }
+
+
 
     public ProgressDialog createProgressDialog(Context context, String message, int initProgressValue, int MaxProgressValue) {
         ProgressDialog progressBar = new ProgressDialog(context);

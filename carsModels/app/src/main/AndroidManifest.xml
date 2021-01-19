@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Brands.AddNewBrandActivity" android:label="Add New Brand"/>
+        <activity android:name=".Brands.AddNewBrandActivity" android:label="@string/add_brand_label"/>
         <activity android:name=".Brands.BrandDetails" />
         <activity android:name=".Cars.AddNewCarActivity" android:label="Add New Car"/>
         <activity android:name=".Cars.CarsDetails" />
