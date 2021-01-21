@@ -3,6 +3,7 @@
     <string name="app_name">احمد</string>
     <!-- Start Brand Section    -->
     <!--UI-->
+    <string name="brand_empty_msg">لا يوجد انواع.</string>
     <string name="add_brand_label">اضافة نوع جديد</string>
     <string name="brand_name_placeholder">الاسم</string>
     <string name="brand_agent_placeholder">اسم الوكيل</string>
@@ -88,7 +89,7 @@
 
     <!-- Start Specification Section    -->
     <!--    UI-->
-    <string name="empty_msg">لا يوجد خصائص</string>
+    <string name="specification_empty_msg">لا يوجد خصائص</string>
     <string name="specification_Settings_label">اعدادات الخصائص</string>
     <string name="add_specification_label">اضافة خاصية جديدة</string>
     <!--    Add -->

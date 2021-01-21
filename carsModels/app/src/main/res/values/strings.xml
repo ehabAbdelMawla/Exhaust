@@ -3,6 +3,7 @@
     <string name="app_name">Ahmed</string>
     <!-- Start Brand Section    -->
     <!--UI-->
+    <string name="brand_empty_msg">No Brands Added yet.</string>
     <string name="add_brand_label">Add New Brand</string>
     <string name="brand_name_placeholder">Brand Name</string>
     <string name="brand_agent_placeholder">Agent Name</string>
@@ -88,7 +89,7 @@
 
     <!-- Start Specification Section    -->
     <!--    UI-->
-    <string name="empty_msg">No Specification Added yet.</string>
+    <string name="specification_empty_msg">No Specification Added yet.</string>
     <string name="specification_Settings_label">Specifications Settings</string>
     <string name="add_specification_label">Add New Specification</string>
     <!--    Add -->

@@ -30,7 +30,7 @@ public class specificationSettings extends AnimatedActivity {
     private FloatingActionButton addNewSpecificationButton;
     private FlexboxLayout specificationsContainer;
     private final int GET_NEW_SPEC = 200;
-    private TextView emptyTextView;
+
 
     /**
      * Activity LifeCycle Events
@@ -58,7 +58,7 @@ public class specificationSettings extends AnimatedActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        YoYo.with(Techniques.SlideInUp)
+        YoYo.with(Techniques.ZoomInUp)
                 .duration(500).playOn(addNewSpecificationButton);
     }
 
@@ -68,7 +68,7 @@ public class specificationSettings extends AnimatedActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_SPEC && resultCode == RESULT_OK && data != null) {
             addSpecification((Specification) data.getSerializableExtra("newSpec"));
-            checkIfEmpty();
+            checkIfEmpty(specificationsContainer.getChildCount() == 0, specificationsContainer, R.string.specification_empty_msg);
         }
     }
 
@@ -89,7 +89,7 @@ public class specificationSettings extends AnimatedActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        checkIfEmpty();
+                        checkIfEmpty(specificationsContainer.getChildCount() == 0, specificationsContainer, R.string.specification_empty_msg);
                     }
                 });
             }
@@ -97,18 +97,6 @@ public class specificationSettings extends AnimatedActivity {
 
     }
 
-
-    private void checkIfEmpty() {
-        if (specificationsContainer.getChildCount() == 0) {
-            emptyTextView = new TextView(this);
-            emptyTextView.setTextSize(20);
-            emptyTextView.setText(R.string.empty_msg);
-            specificationsContainer.addView(emptyTextView);
-            YoYo.with(Techniques.SlideInUp).duration(350).playOn(emptyTextView);
-        } else if (emptyTextView != null) {
-            specificationsContainer.removeView(emptyTextView);
-        }
-    }
 
     public void addSpecification(final Specification spec) {
         final View specificationView = View.inflate(this, R.layout.model_box, null);
@@ -133,14 +121,7 @@ public class specificationSettings extends AnimatedActivity {
                                         long result = spec.remove();
                                         if (result == 1) {
                                             Toast.makeText(getApplicationContext(), R.string.delete_specification_success_msg, Toast.LENGTH_SHORT).show();
-                                            YoYo.with(Techniques.SlideOutDown).onEnd(new YoYo.AnimatorCallback() {
-                                                @Override
-                                                public void call(Animator animator) {
-                                                    specificationsContainer.removeView(specificationView);
-                                                    checkIfEmpty();
-                                                }
-                                            }).duration(250).playOn(specificationView);
-
+                                            removeViewWithAnimate(specificationsContainer, specificationView, Techniques.ZoomOutDown, 300,R.string.specification_empty_msg);
                                         } else {
                                             Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                                         }
@@ -156,12 +137,10 @@ public class specificationSettings extends AnimatedActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
                 if (spec.getImg() != null && !spec.getImg().trim().equals("")) {
                     util.getInstance().setGlideImage(specificationSettings.this, spec.getImg(), (ImageView) specificationView.findViewById(R.id.modelImage));
                 }
-                specificationsContainer.addView(specificationView);
-                YoYo.with(Techniques.SlideInUp).duration(350).playOn(specificationView);
+                addViewWithAnimate(specificationsContainer, specificationView, Techniques.ZoomInUp, 350);
             }
         });
     }

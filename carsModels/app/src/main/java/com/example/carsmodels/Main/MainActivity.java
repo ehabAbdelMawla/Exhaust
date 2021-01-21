@@ -71,6 +71,7 @@ public class MainActivity extends AnimatedActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_BRAND_OBJECT && resultCode == RESULT_OK && data != null) {
             addBrand((Brand) data.getSerializableExtra("newBrand"));
+            checkIfEmpty(modelsContainer.getChildCount() == 0, modelsContainer, R.string.brand_empty_msg);
         }
     }
 
@@ -158,6 +159,12 @@ public class MainActivity extends AnimatedActivity {
                 for (final Brand brand : brands) {
                     addBrand(brand);
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkIfEmpty(modelsContainer.getChildCount() == 0, modelsContainer, R.string.brand_empty_msg);
+                    }
+                });
             }
         });
         new CloseLoaderThread(addBrands,loaderDialog).start();
@@ -204,7 +211,7 @@ public class MainActivity extends AnimatedActivity {
                                         long result = brand.remove();
                                         if (result == 1) {
                                             Toast.makeText(getApplicationContext(), R.string.delete_brand_success_msg, Toast.LENGTH_SHORT).show();
-                                            ((FlexboxLayout) brandView.getParent()).removeView(brandView);
+                                            removeViewWithAnimate(modelsContainer,brandView,Techniques.ZoomOutDown,350,R.string.brand_empty_msg);
                                         } else {
                                             Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                                         }
@@ -223,7 +230,7 @@ public class MainActivity extends AnimatedActivity {
                 if (brand.getImg() != null && !brand.getImg().trim().equals("")) {
                     util.getInstance().setGlideImage(MainActivity.this, brand.getImg(), (ImageView) brandView.findViewById(R.id.modelImage));
                 }
-                modelsContainer.addView(brandView);
+                addViewWithAnimate(modelsContainer,brandView,Techniques.ZoomInUp,350);
             }
         });
 
