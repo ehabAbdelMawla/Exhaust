@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.daimajia.androidanimations.library.Techniques;
 import com.example.carsmodels.Cars.AddNewCarActivity;
 import com.example.carsmodels.Cars.CarsDetails;
 import com.example.carsmodels.Cars.CarsAddAndUpdateFragment;
@@ -22,6 +23,7 @@ import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.Brand;
 import com.example.carsmodels.DataModel.Car;
 import com.example.carsmodels.util.AnimatedActivity;
+import com.example.carsmodels.util.CloseLoaderThread;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
 import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
@@ -62,6 +64,7 @@ public class BrandDetails extends AnimatedActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_CAR_OBJECT && resultCode == RESULT_OK && data != null) {
             addCar((Car) data.getSerializableExtra("newCar"));
+            checkIfEmpty(brandCarContainer.getChildCount()==0,brandCarContainer,R.string.car_empty_msg);
         }
     }
 
@@ -81,12 +84,14 @@ public class BrandDetails extends AnimatedActivity {
 
     private void loadInitData() {
 //        Set Brand Basic info Data
-        util.getInstance().setTextViewValue((TextView) findViewById(R.id.brandName), currentbBrand.getBrandName());
         util.getInstance().setTextViewValue((TextView) findViewById(R.id.brandAgent), currentbBrand.getBrandAgent());
         this.setTitle(currentbBrand.getBrandName());
-        if (currentbBrand.getImg() != null && !currentbBrand.getImg().trim().equals("")) {
-            util.getInstance().setGlideImage(this, currentbBrand.getImg(), (ImageView) findViewById(R.id.brandImage));
-        }
+//        TODO Delete Image AND Brand Name Block After UI Finished
+//        util.getInstance().setTextViewValue((TextView) findViewById(R.id.brandName), currentbBrand.getBrandName());
+//        if (currentbBrand.getImg() != null && !currentbBrand.getImg().trim().equals("")) {
+//            util.getInstance().setGlideImage(this, currentbBrand.getImg(), (ImageView) findViewById(R.id.brandImage));
+//        }
+//        ============================================================================
         /**
          * Load All Cars This Methods Should Call only One Time
          */
@@ -101,16 +106,26 @@ public class BrandDetails extends AnimatedActivity {
          * Clear Parent View
          */
         brandCarContainer.removeAllViews();
-        ArrayList<Car> cars = getAllCarsOfBrand();
-        for (final Car currentObj : cars) {
-            addCar(currentObj);
-        }
+        loaderDialog.displayLoader();
+        new CloseLoaderThread(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Car> cars = getAllCarsOfBrand();
+                for (final Car currentObj : cars) {
+                    addCar(currentObj);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkIfEmpty(brandCarContainer.getChildCount()==0,brandCarContainer,R.string.car_empty_msg);
+                    }
+                });
+            }
+        }), loaderDialog).start();
+
     }
 
     public void addCar(final Car currentObj) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
                 final View modelLayOut = View.inflate(BrandDetails.this, R.layout.model_box, null);
                 ((TextView) modelLayOut.findViewById(R.id.modelName)).setText(currentObj.getCarName());
 
@@ -143,7 +158,7 @@ public class BrandDetails extends AnimatedActivity {
                                                 long result = currentObj.remove();
                                                 if (result == 1) {
                                                     Toast.makeText(getApplicationContext(), R.string.delete_car_success_msg, Toast.LENGTH_SHORT).show();
-                                                    ((FlexboxLayout) modelLayOut.getParent()).removeView(modelLayOut);
+                                                    removeViewWithAnimate(brandCarContainer,modelLayOut, Techniques.ZoomOutDown,350,R.string.car_empty_msg);
                                                 } else {
                                                     Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                                                 }
@@ -162,11 +177,9 @@ public class BrandDetails extends AnimatedActivity {
                         if (currentObj.getImg() != null && !currentObj.getImg().trim().equals("")) {
                             util.getInstance().setGlideImage(BrandDetails.this, currentObj.getImg(), (ImageView) modelLayOut.findViewById(R.id.modelImage));
                         }
-                        brandCarContainer.addView(modelLayOut);
+                        addViewWithAnimate(brandCarContainer,modelLayOut,Techniques.ZoomInUp,350);
                     }
                 });
-            }
-        }).start();
     }
 
     private ArrayList<Car> getAllCarsOfBrand() {

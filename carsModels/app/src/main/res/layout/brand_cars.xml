@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Brands.BrandDetails"
-    >
+    app:theme="@style/FullScreen"
+    tools:context=".Brands.BrandDetails">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,82 +14,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/brandAgentLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center"
-                    android:paddingStart="5dp"
-                    android:text="Brand Agent:"
-                    android:textSize="20sp"
-                    android:textStyle="italic"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/brandName" />
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary">
 
                 <TextView
                     android:id="@+id/brandAgent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="0000"
-                    android:textSize="20sp"
-                    android:textStyle="italic"
-                    app:layout_constraintStart_toEndOf="@+id/brandAgentLabel"
-                    app:layout_constraintTop_toBottomOf="@+id/brandName" />
-
-                <TextView
-                    android:id="@+id/brandName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:padding="10dp"
-                    android:gravity="center"
+                    android:paddingStart="20dp"
                     android:text="0000"
-                    android:textSize="20sp"
+                    android:textColor="@color/wordColor"
                     android:textStyle="bold"
-
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/brandImage" />
-
-                <ImageView
-                    android:id="@+id/brandImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:layout_marginBottom="17dp"
-                    android:maxHeight="250dp"
-                    android:src="@drawable/placholder"
-                    android:background="#000"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="center"
-                    android:text="@string/brand_cars_title"
-                    android:textAlignment="center"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/brandAgent" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:text="@string/brand_cars_title"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/brandCarContainer"
@@ -116,12 +72,12 @@
         android:layout_height="57dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
+        android:background="@color/colorPrimary"
         android:clickable="false"
         android:focusable="auto"
         android:foregroundGravity="center"
-        android:background="@color/colorPrimary"
-        app:backgroundTint="@color/colorPrimary"
         android:textAlignment="center"
+        app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/add" />

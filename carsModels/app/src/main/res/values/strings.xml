@@ -22,6 +22,7 @@
 
     <!-- Start Car Section    -->
     <!--UI-->
+    <string name="car_empty_msg">No Cars Added yet.</string>
     <string name="brand_cars_title">Cars</string>
     <string name="add_car_label">AddNew Car</string>
     <string name="car_name_placeholder">Car Name</string>
@@ -90,6 +91,7 @@
     <!-- Start Specification Section    -->
     <!--    UI-->
     <string name="specification_empty_msg">No Specification Added yet.</string>
+    <string name="add_specification_placeholder">Specification Name</string>
     <string name="specification_Settings_label">Specifications Settings</string>
     <string name="add_specification_label">Add New Specification</string>
     <!--    Add -->

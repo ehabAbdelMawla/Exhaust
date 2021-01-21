@@ -77,7 +77,7 @@ public class SpecificationCuDialogFragment extends AnimatedFragment {
                 util.getInstance().setGlideImage(this, exitsSpec.getImg(), imageView);
             }
             specificationName.setText(exitsSpec.getName());
-            addnewSpecificationButton.setText("Update");
+            addnewSpecificationButton.setText(R.string.update);
         }
 
         /**

@@ -22,6 +22,7 @@
 
     <!-- Start Car Section    -->
     <!--UI-->
+    <string name="car_empty_msg">لا يوجد سيارات</string>
     <string name="brand_cars_title">السيارات</string>
     <string name="add_car_label">اضافة نوع جديد</string>
     <string name="car_name_placeholder">اسم السيارة</string>
@@ -90,6 +91,7 @@
     <!-- Start Specification Section    -->
     <!--    UI-->
     <string name="specification_empty_msg">لا يوجد خصائص</string>
+    <string name="add_specification_placeholder">اسم الخاصية</string>
     <string name="specification_Settings_label">اعدادات الخصائص</string>
     <string name="add_specification_label">اضافة خاصية جديدة</string>
     <!--    Add -->
