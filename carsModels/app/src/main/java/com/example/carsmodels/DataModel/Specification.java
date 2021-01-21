@@ -78,8 +78,6 @@ public class Specification implements Serializable {
     }
 
     public long update() {
-
-        System.out.println("update");
         try {
             SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
             ContentValues myValues = new ContentValues();

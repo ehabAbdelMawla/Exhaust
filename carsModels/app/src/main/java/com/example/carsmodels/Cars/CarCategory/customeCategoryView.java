@@ -83,15 +83,15 @@ public class customeCategoryView extends ConstraintLayout implements View.OnLong
                         break;
                     case R.id.deleteIcon:
                         this.cancel();
-                        new ConfirmDialog(parentActivity, "Delete Category?", android.R.drawable.ic_delete) {
+                        new ConfirmDialog(parentActivity, R.string.delete_category_dialog_title, android.R.drawable.ic_delete) {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 long result = category.remove();
                                 if (result == 1) {
-                                    Toast.makeText(parentActivity, "Category Deleted Successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(parentActivity, R.string.delete_category_success_msg, Toast.LENGTH_SHORT).show();
                                     ((FlexboxLayout) customeCategoryView.this.getParent()).removeView(customeCategoryView.this);
                                 } else {
-                                    Toast.makeText(parentActivity, "Uncatched Error ", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(parentActivity, R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }.show();

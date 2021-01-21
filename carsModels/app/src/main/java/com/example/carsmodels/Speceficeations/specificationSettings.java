@@ -1,30 +1,22 @@
 package com.example.carsmodels.Speceficeations;
 
-import android.app.AlertDialog;
+import android.animation.Animator;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.example.carsmodels.Brands.BrandDetails;
-import com.example.carsmodels.Cars.CarsAddAndUpdateFragment;
-import com.example.carsmodels.Cars.Images.CarColorImages;
-import com.example.carsmodels.Main.MainActivity;
 import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.Specification;
 import com.example.carsmodels.util.AnimatedActivity;
+import com.example.carsmodels.util.CloseLoaderThread;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
 import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
@@ -33,13 +25,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-import static com.example.carsmodels.Main.MainActivity.db;
-
 public class specificationSettings extends AnimatedActivity {
 
     private FloatingActionButton addNewSpecificationButton;
     private FlexboxLayout specificationsContainer;
     private final int GET_NEW_SPEC = 200;
+    private TextView emptyTextView;
 
     /**
      * Activity LifeCycle Events
@@ -72,12 +63,12 @@ public class specificationSettings extends AnimatedActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_SPEC && resultCode == RESULT_OK && data != null) {
             addSpecification((Specification) data.getSerializableExtra("newSpec"));
+            checkIfEmpty();
         }
     }
 
@@ -86,21 +77,43 @@ public class specificationSettings extends AnimatedActivity {
      */
 
     public void loadSpecifications() {
-
         specificationsContainer.removeAllViews();
-        ArrayList<Specification> specs = Specification.getAllspecifications();
-        final specificationSettings globalThis = this;
-        for (final Specification spec : specs) {
-            addSpecification(spec);
+        loaderDialog.displayLoader();
+        new CloseLoaderThread(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ArrayList<Specification> specs = Specification.getAllspecifications();
+                for (final Specification spec : specs) {
+                    addSpecification(spec);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkIfEmpty();
+                    }
+                });
+            }
+        }), loaderDialog).start();
+
+    }
+
+
+    private void checkIfEmpty() {
+        if (specificationsContainer.getChildCount() == 0) {
+            emptyTextView = new TextView(this);
+            emptyTextView.setTextSize(20);
+            emptyTextView.setText(R.string.empty_msg);
+            specificationsContainer.addView(emptyTextView);
+            YoYo.with(Techniques.SlideInUp).duration(350).playOn(emptyTextView);
+        } else if (emptyTextView != null) {
+            specificationsContainer.removeView(emptyTextView);
         }
     }
 
     public void addSpecification(final Specification spec) {
         final View specificationView = View.inflate(this, R.layout.model_box, null);
         ((TextView) specificationView.findViewById(R.id.modelName)).setText(spec.getName());
-        if (spec.getImg() != null && !spec.getImg().trim().equals("")) {
-            util.getInstance().setGlideImage(this, spec.getImg(), (ImageView) specificationView.findViewById(R.id.modelImage));
-        }
+
         specificationView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -114,15 +127,22 @@ public class specificationSettings extends AnimatedActivity {
                                 break;
                             case R.id.deleteIcon:
                                 this.cancel();
-                                new ConfirmDialog(specificationSettings.this, "Delete Specification?", "this Specification will delete from all cars categories too.", android.R.drawable.ic_delete) {
+                                new ConfirmDialog(specificationSettings.this, R.string.delete_specification_dialog_title, R.string.delete_specification_dialog_msg, android.R.drawable.ic_delete) {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         long result = spec.remove();
                                         if (result == 1) {
-                                            Toast.makeText(getApplicationContext(), "Specification Deleted Successfully", Toast.LENGTH_SHORT).show();
-                                            specificationsContainer.removeView(specificationView);
+                                            Toast.makeText(getApplicationContext(), R.string.delete_specification_success_msg, Toast.LENGTH_SHORT).show();
+                                            YoYo.with(Techniques.SlideOutDown).onEnd(new YoYo.AnimatorCallback() {
+                                                @Override
+                                                public void call(Animator animator) {
+                                                    specificationsContainer.removeView(specificationView);
+                                                    checkIfEmpty();
+                                                }
+                                            }).duration(250).playOn(specificationView);
+
                                         } else {
-                                            Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }.show();
@@ -133,6 +153,16 @@ public class specificationSettings extends AnimatedActivity {
                 return true;
             }
         });
-        specificationsContainer.addView(specificationView);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                if (spec.getImg() != null && !spec.getImg().trim().equals("")) {
+                    util.getInstance().setGlideImage(specificationSettings.this, spec.getImg(), (ImageView) specificationView.findViewById(R.id.modelImage));
+                }
+                specificationsContainer.addView(specificationView);
+                YoYo.with(Techniques.SlideInUp).duration(350).playOn(specificationView);
+            }
+        });
     }
 }

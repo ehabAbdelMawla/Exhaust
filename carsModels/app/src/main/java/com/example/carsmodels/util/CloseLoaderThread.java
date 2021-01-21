@@ -5,13 +5,22 @@ import com.example.carsmodels.util.Loader.Loader;
 /**
  * This Thread Used To Await after a working Thread End And Close Loader
  */
-public class CloseLoaderThread extends Thread{
+public class CloseLoaderThread extends Thread {
+    /**
+     * Instance Attributes
+     */
     private Thread workingThread;
     private Loader loaderDialog;
-    public CloseLoaderThread(Thread workingThread, Loader loaderDialog){
-        this.workingThread=workingThread;
-        this.loaderDialog=loaderDialog;
+
+    /**
+     * Constructor
+     */
+    public CloseLoaderThread(Thread workingThread, Loader loaderDialog) {
+        this.workingThread = workingThread;
+        this.loaderDialog = loaderDialog;
     }
+
+
     @Override
     public void run() {
         try {

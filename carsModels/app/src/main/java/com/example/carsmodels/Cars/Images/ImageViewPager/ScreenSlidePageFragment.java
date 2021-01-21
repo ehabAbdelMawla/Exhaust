@@ -27,7 +27,6 @@ public class ScreenSlidePageFragment extends Fragment {
     private int position;
 
 
-
     public ScreenSlidePageFragment(int position) {
         this.position = position;
     }
@@ -46,14 +45,14 @@ public class ScreenSlidePageFragment extends Fragment {
         rootView.findViewById(R.id.deletImageButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ConfirmDialog(rootView.getContext(), "Delete Image?", android.R.drawable.ic_delete) {
+                new ConfirmDialog(rootView.getContext(), R.string.delete_image_dialog_title, android.R.drawable.ic_delete) {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         long result = carImage.remove();
                         if (result == 1) {
-                            Toast.makeText(getContext(), "Image Deleted Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.delete_image_success_msg, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                         }
                         ((ScreenSlidePagerAdapter) (((FullView) getActivity()).getPagerAdapter())).removeView();
                     }

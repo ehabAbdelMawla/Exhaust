@@ -1,5 +1,5 @@
-<resources>
 
+<resources>
     <string name="app_name">Ahmed</string>
     <!-- Start Brand Section    -->
     <!--UI-->
@@ -16,21 +16,98 @@
     <string name="add_brand_success_msg">Brand Added Successfully</string>
     <!--  Update  -->
     <string name="update_brand_success_msg">Brand Updated Successfully</string>
-
     <string name="duplicate_brand_error_msg">Brand Already Exist!</string>
-
     <!-- End Brand Section    -->
+
     <!-- Start Car Section    -->
+    <!--UI-->
+    <string name="brand_cars_title">Cars</string>
+    <string name="add_car_label">AddNew Car</string>
+    <string name="car_name_placeholder">Car Name</string>
+    <string name="car_country_placeholder">Country of Origin </string>
+    <string name="car_hourse_power_placeholder">Hourse power</string>
+    <string name="car_motor_capacity_placeholder">Motor Capacity</string>
+    <string name="car_bag_space_placeholder">Bag Space</string>
+    <!-- Add -->
+    <string name="car_name_required_msg">Car Name is Required!</string>
+    <string name="car_country_required_msg">Country of Origin is Required!</string>
+    <string name="car_hourse_power_required_msg">hourse Power is Required!</string>
+    <string name="car_motor_capacity_required_msg">Motor Capacity is Required!</string>
+    <string name="car_bag_space_required_msg">Bag Space  is Required!</string>
+    <string name="car_numerical_constraint">hourse Power,Motor Capacity and Bag Space allowed Positive Numbers Only!</string>
+    <string name="add_car_success_msg">Car Added Successfully</string>
+    <!--  Update  -->
+    <string name="update_car_success_msg">Car Updated Successfully</string>
+    <string name="duplicate_car_error_msg">Car Already Exist!</string>
     <!--  Delete  -->
     <string name="delete_car_dialog_title">Delete Car?</string>
     <string name="delete_car_dialog_msg">Car Categories,Colors And images Will Deleted too </string>
     <string name="delete_car_success_msg">Car Deleted Successfully</string>
     <!-- End Car Section    -->
 
+    <!-- Start Images Section    -->
+    <!--    Delete-->
+    <string name="delete_images_dialog_title">Delete  %1$d Images?</string>
+    <string name="delete_images_success_msg">%1$d Image Deleted</string>
+    <string name="delete_image_dialog_title">delete Image</string>
+    <string name="delete_image_success_msg">Image Deleted Successfully</string>
+    <!--    Add -->
+    <string name="add_image_success_msg">Image Added Successfully</string>
+    <string name="add_images_success_msg">%1$d Image Added </string>
+    <string name="add_images_faild_msg">%1$d  Faild </string>
+    <string name="add_images_duplicated_msg">%1$d  duplicated </string>
+    <string name="add_images_loader_msg">Adding Images ...</string>
+    <string name="duplicate_image_error_msg">Image Already Exist!</string>
+    <!-- End Images Section    -->
+
+    <!-- Start Colors Section    -->
+    <!--    Add -->
+    <string name="add_color_success_msg">Color Added Successfully</string>
+    <!--    Update -->
+    <string name="update_color_success_msg">Color Update Successfully</string>
+    <string name="color_duplicated_msg">Color Already Exist!</string>
+    <!--    Delete -->
+    <string name="delete_color_dialog_title">Delete Color?</string>
+    <string name="delete_color_success_msg">Color Deleted Successfully</string>
+    <!-- End Colors Section    -->
+
+    <!-- Start Category Section    -->
+    <!--    UI -->
+    <string name="add_new_category_label">Add New Category</string>
+    <string name="category_name_placeholder">Category Name</string>
+    <!--    Add -->
+    <string name="category_name_required_msg">Category Name is Required!</string>
+    <string name="add_category_success_msg">Category Added Successfully</string>
+    <!-- Update   -->
+    <string name="update_category_success_msg">Category Updated Successfully</string>
+    <string name="duplicate_category_error_msg">Category Already Exist!</string>
+    <!--    Delete -->
+    <string name="delete_category_dialog_title">Delete Category?</string>
+    <string name="delete_category_success_msg">Category Deleted Successfully</string>
+    <!-- End Category Section    -->
+
+    <!-- Start Specification Section    -->
+    <!--    UI-->
+    <string name="empty_msg">No Specification Added yet.</string>
+    <string name="specification_Settings_label">Specifications Settings</string>
+    <string name="add_specification_label">Add New Specification</string>
+    <!--    Add -->
+    <string name="specification_name_placeholder">Specification Name is Required!</string>
+    <string name="specification_icon_placeholder">Specification icon is Required!</string>
+    <string name="add_specification_success_msg">Specification Added Successfully</string>
+    <string name="update_specification_success_msg">Specification Updated Successfully</string>
+    <string name="duplicate_specification_error_msg">Specification Already Exist!</string>
+    <!--    Delete -->
+    <string name="delete_specification_dialog_title">Delete Specification?</string>
+    <string name="delete_specification_dialog_msg">this Specification will delete from all cars categories too.</string>
+    <string name="delete_specification_success_msg">Specification Deleted Successfully</string>
+    <!-- End Specification Section    -->
 
     <!--    General  -->
     <string name="uncatched_error">Uncatched Error</string>
+    <string name="un_picked_image_error">You haven\'t picked Image</string>
     <string name="image_file_does_notExists">Error ,Cannot Load Image</string>
     <string name="add">Add</string>
     <string name="update">Update</string>
+    <string name="loading"> loading . . .</string>
 </resources>

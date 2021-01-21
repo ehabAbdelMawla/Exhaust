@@ -26,6 +26,7 @@ import com.example.carsmodels.Cars.Images.CarColorImages;
 import com.example.carsmodels.R;
 import com.example.carsmodels.DataModel.Specification;
 import com.example.carsmodels.util.AnimatedFragment;
+import com.example.carsmodels.util.CloseLoaderThread;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -86,35 +87,62 @@ public class SpecificationCuDialogFragment extends AnimatedFragment {
             @Override
             public void onClick(View v) {
                 if (util.getInstance().getVal(specificationName).equalsIgnoreCase("")) {
-                    Toast.makeText(getActivity(), "Specification Name is Required", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.specification_name_placeholder, Toast.LENGTH_LONG).show();
                 } else if (bitmap == null && exitsSpec == null) {
-                    Toast.makeText(getActivity(), "Specification icon is Required", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.specification_icon_placeholder, Toast.LENGTH_LONG).show();
                 } else {
-                    Specification newSpecification = new Specification(util.getInstance().getMaximum("id", "specifications"), util.getInstance().getVal(specificationName), (updateMode && bitmap == null) ? exitsSpec.getImg() : util.getInstance().saveToInternalStorage(SpecificationCuDialogFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"));
-                    if (updateMode) {
-                        newSpecification.setId(exitsSpec.getId());
-                        if (bitmap != null) {
-                            util.getInstance().removeFile(exitsSpec.getImg());
+                    loaderDialog.displayLoader();
+                    Thread addOrUpdateSpecification = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final Specification newSpecification = new Specification(util.getInstance().getMaximum("id", "specifications"), util.getInstance().getVal(specificationName), (updateMode && bitmap == null) ? exitsSpec.getImg() : util.getInstance().saveToInternalStorage(SpecificationCuDialogFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"));
+                            if (updateMode) {
+                                newSpecification.setId(exitsSpec.getId());
+                                if (bitmap != null) {
+                                    util.getInstance().removeFile(exitsSpec.getImg());
+                                }
+                            }
+                            long operationResult = updateMode ? newSpecification.update() : newSpecification.insert();
+                            if (operationResult > 0) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), updateMode ? R.string.update_specification_success_msg : R.string.add_specification_success_msg, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                if (getDialog() != null) {
+                                    getDialog().dismiss();
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ((FlexboxLayout) specificationView.getParent()).removeView(specificationView);
+                                            ((specificationSettings) getActivity()).addSpecification(newSpecification);
+                                        }
+                                    });
+                                } else {
+                                    Intent newSpecificationIntent = new Intent();
+                                    newSpecificationIntent.putExtra("newSpec", newSpecification);
+                                    getActivity().setResult(Activity.RESULT_OK, newSpecificationIntent);
+                                    getActivity().finish();
+                                }
+                            } else if ((operationResult == -1 && exitsSpec == null) || (operationResult == 0 && exitsSpec != null)) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), R.string.duplicate_specification_error_msg, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         }
-                    }
-                    long operationResult = updateMode ? newSpecification.update() : newSpecification.insert();
-                    if (operationResult > 0) {
-                        Toast.makeText(getActivity(), updateMode ? "Specification updated Successfully" : "Specification Added Successfully", Toast.LENGTH_SHORT).show();
-                        if (getDialog() != null) {
-                            getDialog().dismiss();
-                            ((FlexboxLayout) specificationView.getParent()).removeView(specificationView);
-                            ((specificationSettings) getActivity()).addSpecification(newSpecification);
-                        } else {
-                            Intent newSpecificationIntent = new Intent();
-                            newSpecificationIntent.putExtra("newSpec", newSpecification);
-                            getActivity().setResult(Activity.RESULT_OK, newSpecificationIntent);
-                            getActivity().finish();
-                        }
-                    } else if ((operationResult == -1 && exitsSpec == null) || (operationResult == 0 && exitsSpec != null)) {
-                        Toast.makeText(getActivity(), "Specification Already Exist!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
-                    }
+                    });
+                    new CloseLoaderThread(addOrUpdateSpecification, loaderDialog).start();
                 }
             }
         });
@@ -141,11 +169,11 @@ public class SpecificationCuDialogFragment extends AnimatedFragment {
             } catch (FileNotFoundException e) {
                 bitmap = null;
                 imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getActivity(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 bitmap = null;
                 imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getActivity(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
             }
         }
     }

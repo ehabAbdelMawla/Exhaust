@@ -64,7 +64,6 @@ public class CarImage {
             return BitmapFactory.decodeStream(new FileInputStream(new File(this.getImgPath())));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.out.println("Image Not Found");
         }
         return null;
     }

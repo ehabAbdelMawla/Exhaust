@@ -23,6 +23,7 @@ import com.example.carsmodels.Brands.BrandDetails;
 import com.example.carsmodels.DataModel.Car;
 import com.example.carsmodels.R;
 import com.example.carsmodels.util.AnimatedFragment;
+import com.example.carsmodels.util.CloseLoaderThread;
 import com.example.carsmodels.util.Loader.Loader;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
@@ -65,7 +66,6 @@ public class CarsAddAndUpdateFragment extends AnimatedFragment {
     }
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,7 +80,6 @@ public class CarsAddAndUpdateFragment extends AnimatedFragment {
         bagSpace = rootView.findViewById(R.id.bagSpace);
         imageView = rootView.findViewById(R.id.imageView);
 
-        final Loader loaderDialog = new Loader(getContext());
         final util utilMethods = util.getInstance();
         final boolean updateMode = car != null;
 
@@ -96,7 +95,8 @@ public class CarsAddAndUpdateFragment extends AnimatedFragment {
             utilMethods.setTextViewValue(motorCapacity, String.valueOf(car.getMotorCapacity()));
             utilMethods.setTextViewValue(hoursePower, String.valueOf(car.getHoursePower()));
             utilMethods.setTextViewValue(bagSpace, String.valueOf(car.getBagSpace()));
-            addButton.setText("Update");
+            carName.requestFocus();
+            addButton.setText(R.string.update);
         }
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -105,61 +105,92 @@ public class CarsAddAndUpdateFragment extends AnimatedFragment {
 
                 final boolean chooseImage = bitmap != null;
                 if (utilMethods.getVal(carName).equals("")) {
-                    Toast.makeText(getActivity(), "Car Name is Required!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.car_name_required_msg, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (utilMethods.getVal(carCountryOrigin).equals("")) {
-                    Toast.makeText(getActivity(), "Country of Origin is Required!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.car_country_required_msg, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (utilMethods.getVal(hoursePower).equals("")) {
-                    Toast.makeText(getActivity(), "hourse Power is Required!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.car_hourse_power_required_msg, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (utilMethods.getVal(motorCapacity).equals("")) {
-                    Toast.makeText(getActivity(), "Motor Capacity is Required!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.car_motor_capacity_required_msg, Toast.LENGTH_SHORT).show();
                     return;
                 } else if (utilMethods.getVal(bagSpace).equals("")) {
-                    Toast.makeText(getActivity(), "Bag Space  is Required!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.car_bag_space_required_msg, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                double hp, mc, bs;
+                final double hp, mc, bs;
                 try {
                     hp = Double.parseDouble(utilMethods.getVal(hoursePower));
                     mc = Double.parseDouble(utilMethods.getVal(motorCapacity));
                     bs = Double.parseDouble(utilMethods.getVal(bagSpace));
+                    if (hp <= 0 || mc <= 0 || bs <= 0) {
+                        throw new NumberFormatException();
+                    }
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getActivity(), "hourse Power,Motor Capacity and Bag Space allowed Numbers Only!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.car_numerical_constraint, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                loaderDialog.displayLoader();
-                Car newCar = new Car(utilMethods.getVal(carName), utilMethods.getVal(carCountryOrigin), mc, hp, bs, !chooseImage ? "" : util.getInstance().saveToInternalStorage(CarsAddAndUpdateFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"), BrandDetails.getBrand().getId());
-                if (updateMode) {
-                    newCar.setId(car.getId());
-                    if (chooseImage) {
-                        //he change Image
-                        util.getInstance().removeFile(car.getImg());
-                    } else {
-                        newCar.setImg(car.getImg());
-                    }
-                }
-                long operationResult = updateMode ? newCar.update() : newCar.insert();
-                if (operationResult > 0) {
-                    Toast.makeText(getActivity(), updateMode ? "Car Updated Successfully" : "Car Added Successfully", Toast.LENGTH_SHORT).show();
 
-                    if (getDialog() != null) {
-                        getDialog().dismiss();
-                        ((FlexboxLayout) carView.getParent()).removeView(carView);
-                        ((BrandDetails) getActivity()).addCar(newCar);
-                    } else {
-                        Intent newCarIntent = new Intent();
-                        newCarIntent.putExtra("newCar", newCar);
-                        getActivity().setResult(RESULT_OK, newCarIntent);
-                        getActivity().finish();
+                loaderDialog.displayLoader();
+                Thread addOrUpdateCar = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Car newCar = new Car(utilMethods.getVal(carName), utilMethods.getVal(carCountryOrigin), mc, hp, bs, !chooseImage ? "" : util.getInstance().saveToInternalStorage(CarsAddAndUpdateFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"), BrandDetails.getBrand().getId());
+                        if (updateMode) {
+                            newCar.setId(car.getId());
+                            if (chooseImage) {
+                                //user change Image
+                                util.getInstance().removeFile(car.getImg());
+                            } else {
+                                newCar.setImg(car.getImg());
+                            }
+                        }
+                        long operationResult = updateMode ? newCar.update() : newCar.insert();
+                        if (operationResult > 0) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), updateMode ? R.string.update_car_success_msg : R.string.add_car_success_msg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                            if (getDialog() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getDialog().dismiss();
+                                        ((FlexboxLayout) carView.getParent()).removeView(carView);
+                                        ((BrandDetails) getActivity()).addCar(newCar);
+                                    }
+                                });
+                            } else {
+
+                                Intent newCarIntent = new Intent();
+                                newCarIntent.putExtra("newCar", newCar);
+                                getActivity().setResult(RESULT_OK, newCarIntent);
+                                getActivity().finish();
+                            }
+                        } else if ((!updateMode && operationResult == -1) || (updateMode && operationResult == 0)) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), R.string.duplicate_car_error_msg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
-                } else if ((!updateMode && operationResult == -1) || (updateMode && operationResult == 0)) {
-                    Toast.makeText(getActivity(), "Car Already Exist!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
-                }
-                loaderDialog.dismissLoader();
+                });
+
+                new CloseLoaderThread(addOrUpdateCar, loaderDialog).start();
             }
         });
 
@@ -184,11 +215,11 @@ public class CarsAddAndUpdateFragment extends AnimatedFragment {
             } catch (FileNotFoundException e) {
                 bitmap = null;
                 imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getActivity(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 bitmap = null;
                 imageView.setImageResource(R.drawable.placholder);
-                Toast.makeText(getActivity(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -24,11 +24,11 @@
         </activity>
         <activity android:name=".Brands.AddNewBrandActivity" android:label="@string/add_brand_label"/>
         <activity android:name=".Brands.BrandDetails" />
-        <activity android:name=".Cars.AddNewCarActivity" android:label="Add New Car"/>
+        <activity android:name=".Cars.AddNewCarActivity" android:label="@string/add_car_label"/>
         <activity android:name=".Cars.CarsDetails" />
-        <activity android:name=".Cars.CarCategory.AddNewCategory" android:label="Add New Category"/>
-        <activity android:name=".Speceficeations.specificationSettings" android:label="Specifications Settings"/>
-        <activity android:name=".Speceficeations.addNewSpecification" android:label="Add New Specification"/>
+        <activity android:name=".Cars.CarCategory.AddNewCategory" android:label="@string/add_new_category_label"/>
+        <activity android:name=".Speceficeations.specificationSettings" android:label="@string/specification_Settings_label"/>
+        <activity android:name=".Speceficeations.addNewSpecification" android:label="@string/add_specification_label"/>
         <activity android:name=".Cars.Images.CarColorImages" android:label="Images"/>
         <activity android:name=".Cars.Images.ImageViewPager.FullView" android:theme="@style/FullScreen"/>
 

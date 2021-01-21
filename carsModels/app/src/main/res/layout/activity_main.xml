@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:clickable="false"
     android:focusable="auto"
-    tools:context=".Main.MainActivity">
+    tools:context=".Main.MainActivity"
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="75dp"
             android:textAlignment="center"
-            app:justifyContent="center"
+            app:justifyContent="space_around"
             app:alignContent="center"
             app:alignItems="center"
             app:flexDirection="row"
@@ -72,7 +73,7 @@
             app:fabCustomSize="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/settings" />
+            app:srcCompat="@drawable/specification_btn_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

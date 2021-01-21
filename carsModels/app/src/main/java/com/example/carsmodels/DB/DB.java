@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 public class DB extends SQLiteOpenHelper {
     public DB(@Nullable Context context) {
         super(context, "data.db", null, 1);
-
     }
 
 

@@ -99,11 +99,11 @@ public class CustomeColorView extends ConstraintLayout implements View.OnClickLi
                         break;
                     case R.id.deleteIcon:
                         this.cancel();
-                        new ConfirmDialog(CustomeColorView.this.getContext(), "Delete Color?", android.R.drawable.ic_delete) {
+                        new ConfirmDialog(CustomeColorView.this.getContext(), R.string.delete_color_dialog_title, android.R.drawable.ic_delete) {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 CarColor.removeRelation(colorObj.getRealtionId());
-                                Toast.makeText(CustomeColorView.this.getContext(), "Color Deleted Successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(CustomeColorView.this.getContext(), R.string.delete_color_success_msg, Toast.LENGTH_LONG).show();
                                 ((FlexboxLayout) CustomeColorView.this.getParent()).removeView(CustomeColorView.this);
                             }
                         }.show();

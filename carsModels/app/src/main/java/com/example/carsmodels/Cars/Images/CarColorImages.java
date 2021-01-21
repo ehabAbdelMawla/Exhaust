@@ -57,7 +57,6 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
     private Menu menu = null;
     protected boolean selectedMode = false;
     private final Map<Integer, CustomeImage> selectedIds = new HashMap<>();
-    private Loader loaderDialog;
 
     /**
      * Activity LifeCycle Events
@@ -85,7 +84,6 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
         /**
          * Variables Declarations
          */
-        loaderDialog = new Loader(this);
         FloatingActionButton addImagesButton = findViewById(R.id.addNewSpec);
         addImagesButton.setOnClickListener(this);
         imagesContainer = findViewById(R.id.specificationContainer);
@@ -119,22 +117,22 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                         int id = util.getInstance().getMaximum("id", "carImages");
                         long result = CarImage.addCarImageRelation(relationId, util.getInstance().saveToInternalStorage(this, MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri), "colorImages", relationId + new Date().getTime() + ".png"), id);
                         if (result > 0) {
-                            Toast.makeText(getApplicationContext(), "Image Added Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.add_image_success_msg, Toast.LENGTH_SHORT).show();
                             loadImages(id);
                         } else if (result == -1) {
-                            Toast.makeText(getApplicationContext(), "Image Already Exist!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.duplicate_image_error_msg, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getApplicationContext(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "Error ,Cannot Load Image", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
                     //  Add Multible Images
                     if (data.getClipData() != null) {
                         final ClipData mClipData = data.getClipData();
-                        final ProgressDialog progressBar = util.getInstance().createProgressDialog(this, "Adding Images ...", 0, mClipData.getItemCount());
+                        final ProgressDialog progressBar = util.getInstance().createProgressDialog(this, getResources().getString(R.string.add_images_loader_msg), 0, mClipData.getItemCount());
                         progressBar.show();
                         new Thread(
                                 new Runnable() {
@@ -163,10 +161,10 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                     }
                 }
             } else {
-                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.un_picked_image_error, Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.uncatched_error, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -248,7 +246,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                 }
             }
         });
-        new CloseLoaderThread(loadImagesThread,loaderDialog).start();
+        new CloseLoaderThread(loadImagesThread, loaderDialog).start();
     }
 
     /**
@@ -296,7 +294,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
     }
 
     private void deleteSelectedImages() {
-        new ConfirmDialog(this, "Delete " + selectedIds.size() + " Images?", android.R.drawable.ic_delete) {
+        new ConfirmDialog(this, String.format(getResources().getString(R.string.delete_images_dialog_title), selectedIds.size()), android.R.drawable.ic_delete) {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 StringBuilder sb = new StringBuilder();
@@ -317,7 +315,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                 util.getInstance().removeFiles(imagesPathsToDelete);
                 util.getInstance().deleteImagesWithIds(sb.toString());
                 clearSelectionMode();
-                Toast.makeText(CarColorImages.this, +size + " Image Deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CarColorImages.this, String.format(getResources().getString(R.string.delete_images_success_msg), size), Toast.LENGTH_SHORT).show();
             }
         }.show();
     }
@@ -331,14 +329,14 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
             @Override
             public void run() {
                 if (finalRepeatedImage == 0 && finalFailImage == 0) {
-                    Toast.makeText(CarColorImages.this, totalImages + " Images Added Successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CarColorImages.this, String.format(getResources().getString(R.string.add_images_success_msg), totalImages), Toast.LENGTH_LONG).show();
                 } else if (finalRepeatedImage == 0) {
-                    Toast.makeText(CarColorImages.this, (totalImages - finalFailImage) + " Images Added \n" + finalFailImage + " Faild ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CarColorImages.this, String.format(getResources().getString(R.string.add_images_success_msg), totalImages - finalFailImage) + "\n" + String.format(getResources().getString(R.string.add_images_faild_msg), finalFailImage) + +finalFailImage + " Faild ", Toast.LENGTH_LONG).show();
 
                 } else if (finalFailImage == 0) {
-                    Toast.makeText(CarColorImages.this, (totalImages - finalRepeatedImage) + " Images Added \n" + finalRepeatedImage + " Already Exists", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CarColorImages.this, String.format(getResources().getString(R.string.add_images_success_msg), totalImages - finalRepeatedImage) + "\n" + String.format(getResources().getString(R.string.add_images_duplicated_msg), finalRepeatedImage), Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(CarColorImages.this, (totalImages - (finalRepeatedImage + finalFailImage)) + " Images Added \n" + finalRepeatedImage + " Already Exists \n" + finalFailImage + "Faild", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CarColorImages.this, String.format(getResources().getString(R.string.add_images_success_msg), (totalImages - (finalRepeatedImage + finalFailImage))) + "\n" + String.format(getResources().getString(R.string.add_images_faild_msg), finalFailImage) + "" + String.format(getResources().getString(R.string.add_images_duplicated_msg), finalRepeatedImage), Toast.LENGTH_LONG).show();
                 }
                 progressBar.dismiss();
                 loadImages(startId);
@@ -408,9 +406,6 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), GET_FROM_GALLERY);
-                break;
-            case R.id.specificationContainer:
-                System.out.println("specificationContainer " + v.getId());
                 break;
             case R.id.parentId:
                 CustomeImage obj = (CustomeImage) v;

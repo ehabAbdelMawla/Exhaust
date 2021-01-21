@@ -13,16 +13,14 @@ public abstract class ConfirmDialog extends AlertDialog.Builder implements Dialo
         setPositiveButton(android.R.string.yes, this);
         setNegativeButton(android.R.string.no, null);
     }
-// TODO This Constructor Must Remove After Languages Finish
-    public ConfirmDialog(Context context, String title, String msg, int iconId) {
+
+    public ConfirmDialog(Context context, int title, int iconId) {
         super(context);
         setTitle(title);
-        setMessage(msg);
         setIcon(iconId);
         setPositiveButton(android.R.string.yes, this);
         setNegativeButton(android.R.string.no, null);
     }
-
 
     public ConfirmDialog(Context context, int title, int msg, int iconId) {
         super(context);

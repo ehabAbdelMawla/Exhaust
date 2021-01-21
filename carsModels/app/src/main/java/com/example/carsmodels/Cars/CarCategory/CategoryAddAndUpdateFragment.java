@@ -66,7 +66,7 @@ public class CategoryAddAndUpdateFragment extends AnimatedFragment {
         final boolean editMode = existCateg != null;
         if (editMode) {
             CategoryName.setText(existCateg.getCategory().getCategName());
-            AddButton.setText("Edit");
+            AddButton.setText(R.string.update);
 
         }
         /**
@@ -86,11 +86,10 @@ public class CategoryAddAndUpdateFragment extends AnimatedFragment {
             @Override
             public void onClick(View v) {
                 if (util.getInstance().getVal(CategoryName).equalsIgnoreCase("")) {
-                    Toast.makeText(getActivity(), "Category Name is Required.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.category_name_required_msg, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 CarCategoty newCateg = new CarCategoty(util.getInstance().getMaximum("id", "carsCategory"), util.getInstance().getVal(CategoryName), CarsDetails.getCurrentCar().getId());
-
                 if (editMode) {
                     newCateg.setId(existCateg.getCategory().getId());
                 }
@@ -103,9 +102,8 @@ public class CategoryAddAndUpdateFragment extends AnimatedFragment {
                         CarCategoty.removeSpecificationAndCategoryRelation(newCateg.getId(), specId);
                     }
                 }
-                System.out.println("operationResult : "+operationResult);
                 if (operationResult > 0) {
-                    Toast.makeText(getActivity(), editMode ? "Category Updated Successfully" : "Category Added Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), editMode ?R.string.update_category_success_msg : R.string.add_category_success_msg, Toast.LENGTH_SHORT).show();
                     if (getDialog() != null) {
                         getDialog().dismiss();
                         FlexboxLayout parent=(FlexboxLayout) existCateg.getParent();
@@ -118,15 +116,13 @@ public class CategoryAddAndUpdateFragment extends AnimatedFragment {
                         getActivity().finish();
                     }
                 } else if (operationResult == -1) {
-                    Toast.makeText(getActivity(), "Category Already Exist!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.duplicate_category_error_msg, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });
         return rootView;
     }
-
-
 }
 

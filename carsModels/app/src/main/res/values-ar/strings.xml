@@ -16,20 +16,98 @@
     <string name="add_brand_success_msg">تم اضافة النوع بنجاح</string>
     <!--  Update  -->
     <string name="update_brand_success_msg">تم تعديل النزع بنجاح</string>
-
     <string name="duplicate_brand_error_msg">هذا النوع موجود بالفعل</string>
-
     <!-- End Brand Section    -->
+
     <!-- Start Car Section    -->
+    <!--UI-->
+    <string name="brand_cars_title">السيارات</string>
+    <string name="add_car_label">اضافة نوع جديد</string>
+    <string name="car_name_placeholder">اسم السيارة</string>
+    <string name="car_country_placeholder">بلد المنشأ </string>
+    <string name="car_hourse_power_placeholder">قوة الماتور</string>
+    <string name="car_motor_capacity_placeholder">سعة الماتور</string>
+    <string name="car_bag_space_placeholder">سعة الحقيبة</string>
+    <!-- Add -->
+    <string name="car_name_required_msg">يجب ادخال اسم السيارة</string>
+    <string name="car_country_required_msg">يجب ادخال بلد المنشأ</string>
+    <string name="car_hourse_power_required_msg">يجب ادخال قوة الماتور بالاحصنة</string>
+    <string name="car_motor_capacity_required_msg">يجب ادخال سعة الماتور</string>
+    <string name="car_bag_space_required_msg">يجب ادخال سعة الحقيبة</string>
+    <string name="car_numerical_constraint">يجب ادخال سعة الحقيبة</string>
+    <string name="add_car_success_msg">تم اضافة السيارة بنجاح</string>
+    <!--  Update  -->
+    <string name="update_car_success_msg">تم تعديل السيارة بنجاح</string>
+    <string name="duplicate_car_error_msg">هذه السيارة موجوده بالفعل</string>
     <!--  Delete  -->
     <string name="delete_car_dialog_title">حذف السيارة؟</string>
     <string name="delete_car_dialog_msg">فئات السيارة, الوانها و صورها سيتم حذفها ايضاً</string>
-    <string name="delete_car_success_msg">تم حذف السيارة بنجاح</string>
+    <string name="delete_car_success_msg">عدد الاحصنة,سعة الماتور و سعة الحقيبة يجب ان يكونوا ارقام موجبة فقط!</string>
     <!-- End Car Section    -->
+
+    <!-- Start Images Section    -->
+    <!--    Delete-->
+    <string name="delete_images_dialog_title">حذف  %1$d صورة؟</string>
+    <string name="delete_images_success_msg">تم حذف  %1$d صورة</string>
+    <string name="delete_image_dialog_title">حذف الصورة؟</string>
+    <string name="delete_image_success_msg">تم حذف الصورة بنجاح</string>
+    <!--    Add -->
+    <string name="add_image_success_msg">تم اضافة الصورة بنجاح</string>
+    <string name="add_images_success_msg">تم اضافة %1$d صورة</string>
+    <string name="add_images_faild_msg"> لم تمم اضافة %1$d</string>
+    <string name="add_images_duplicated_msg"> مكررين %1$d</string>
+    <string name="add_images_loader_msg">اضافة الصور ....</string>
+    <string name="duplicate_image_error_msg">هذه الصورة موجوده بالفعل</string>
+    <!-- End Images Section    -->
+
+    <!-- Start Colors Section    -->
+    <!--    Add -->
+    <string name="add_color_success_msg">تم اضافة اللون بنجاح</string>
+    <!--    Update -->
+    <string name="update_color_success_msg">تم تعديل اللون بنجاح</string>
+    <string name="color_duplicated_msg">اللون موجود بالفعل</string>
+    <!--    Delete -->
+    <string name="delete_color_dialog_title">حذف اللون؟</string>
+    <string name="delete_color_success_msg">تم حذف اللون بنجاح</string>
+    <!-- End Colors Section    -->
+
+    <!-- Start Category Section    -->
+    <!--    UI-->
+    <string name="add_new_category_label">اضافة فئة جديدة</string>
+    <string name="category_name_placeholder">اسم الفئة</string>
+    <!--    Add -->
+    <string name="category_name_required_msg">يجب ادخال اسم الفئة</string>
+    <string name="add_category_success_msg">تم اضافة الفئة بنجاح</string>
+    <!-- Update   -->
+    <string name="update_category_success_msg">تم تعديل الفئة بنجاح</string>
+    <string name="duplicate_category_error_msg">هذه الفئة موجوده بالفعل</string>
+    <!--    Delete -->
+    <string name="delete_category_dialog_title">حذف الفئة؟</string>
+    <string name="delete_category_success_msg">تم حذف الفئة بنجاح</string>
+    <!-- End Category Section    -->
+
+    <!-- Start Specification Section    -->
+    <!--    UI-->
+    <string name="empty_msg">لا يوجد خصائص</string>
+    <string name="specification_Settings_label">اعدادات الخصائص</string>
+    <string name="add_specification_label">اضافة خاصية جديدة</string>
+    <!--    Add -->
+    <string name="specification_name_placeholder">يجب كتابة اسم الخاصية</string>
+    <string name="specification_icon_placeholder">يجب اختيار صورة الخاصية</string>
+    <string name="add_specification_success_msg">تم اضافة الخاصية بنجاح</string>
+    <string name="update_specification_success_msg">تم تعديل الخاصية بنجاح</string>
+    <string name="duplicate_specification_error_msg">هذه الخاصية موجودة بالفعل</string>
+    <!--    Delete -->
+    <string name="delete_specification_dialog_title">حذف الخاصية؟</string>
+    <string name="delete_specification_dialog_msg">سيتم حذف هذه الخاصية من جميع السيارات.</string>
+    <string name="delete_specification_success_msg">تم حذف الخاصية بنجاح</string>
+    <!-- End Specification Section    -->
 
     <!--    General -->
     <string name="uncatched_error">حدث خطأ</string>
+    <string name="un_picked_image_error">لم يتم اختيار صورة</string>
     <string name="image_file_does_notExists">خطأ,لا يمكن تحميل الصورة  </string>
     <string name="add">اضافة</string>
     <string name="update">تعديل</string>
+    <string name="loading">تحميل . . .</string>
 </resources>

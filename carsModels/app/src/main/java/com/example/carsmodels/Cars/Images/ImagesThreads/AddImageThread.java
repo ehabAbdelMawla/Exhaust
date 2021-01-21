@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.example.carsmodels.DataModel.CarImage;
 import com.example.carsmodels.util.util;
@@ -53,7 +54,7 @@ public class AddImageThread extends Thread {
             }
             AddImageThread.progressBar.setProgress(++AddImageThread.progressValue);
         } catch (Exception ex) {
-            System.out.println("Exception " + ex);
+            Log.i(getClass().getName(),"Exception "+ex);
         }
     }
 

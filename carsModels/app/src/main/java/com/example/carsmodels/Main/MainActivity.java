@@ -44,7 +44,6 @@ public class MainActivity extends AnimatedActivity {
      */
     private FlexboxLayout modelsContainer;
     private int GET_NEW_BRAND_OBJECT = 500;
-    private Loader loaderDialog;
 
     /**
      * Activity LifeCycle Events

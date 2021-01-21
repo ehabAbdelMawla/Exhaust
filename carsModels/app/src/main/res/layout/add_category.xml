@@ -28,7 +28,7 @@
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="50dp"
-                android:hint="Category Name"
+                android:hint="@string/category_name_placeholder"
                 android:textAlignment="center" />
 
             <com.google.android.flexbox.FlexboxLayout
@@ -57,7 +57,7 @@
                 android:focusable="auto"
                 android:focusableInTouchMode="true"
                 android:padding="10dp"
-                android:text="Add"
+                android:text="@string/add"
                 android:textAllCaps="true"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"

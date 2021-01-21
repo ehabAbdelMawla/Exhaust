@@ -154,11 +154,11 @@ public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
 
     public void showToast(long result, boolean updateMode) {
         if (result > 0) {
-            Toast.makeText(getActivity(), updateMode ? "Color Update Successfully" : "Color Added Successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), updateMode ? R.string.update_color_success_msg: R.string.add_color_success_msg, Toast.LENGTH_SHORT).show();
         } else if (result == -1) {
-            Toast.makeText(getActivity(), "Color Already Exist!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.color_duplicated_msg, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity(), "Uncatched Error ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

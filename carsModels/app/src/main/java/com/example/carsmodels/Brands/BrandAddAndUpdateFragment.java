@@ -80,7 +80,6 @@ public class BrandAddAndUpdateFragment extends AnimatedFragment {
         FloatingActionButton uploadImage = rootView.findViewById(R.id.addImageButton);
         imageView = rootView.findViewById(R.id.imageView);
 
-        final Loader loaderDialog = new Loader(getContext());
 
         if (updateMode) {
             /**
@@ -91,6 +90,7 @@ public class BrandAddAndUpdateFragment extends AnimatedFragment {
             }
             brandNameText.setText(brand.getBrandName());
             brandAgentText.setText(brand.getBrandAgent());
+            brandNameText.requestFocus();
             addButton.setText(R.string.update);
         }
 
@@ -109,7 +109,7 @@ public class BrandAddAndUpdateFragment extends AnimatedFragment {
                     return;
                 }
                 loaderDialog.displayLoader();
-                final Thread addOrUpdate=new Thread(new Runnable() {
+                final Thread addOrUpdate = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         final Brand newBrand = new Brand(util.getInstance().getMaximum("id", "brands"), utilMethods.getVal(brandNameText), utilMethods.getVal(brandAgentText), bitmap == null ? "" : util.getInstance().saveToInternalStorage(BrandAddAndUpdateFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"));
@@ -163,7 +163,7 @@ public class BrandAddAndUpdateFragment extends AnimatedFragment {
                     }
                 });
 
-                new CloseLoaderThread(addOrUpdate,loaderDialog).start();
+                new CloseLoaderThread(addOrUpdate, loaderDialog).start();
             }
         });
 

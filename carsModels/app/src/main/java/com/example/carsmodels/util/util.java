@@ -85,7 +85,6 @@ public class util {
     }
 
 
-
     public ProgressDialog createProgressDialog(Context context, String message, int initProgressValue, int MaxProgressValue) {
         ProgressDialog progressBar = new ProgressDialog(context);
         progressBar.setCanceledOnTouchOutside(false);
@@ -96,6 +95,8 @@ public class util {
         progressBar.setMax(MaxProgressValue);
         return progressBar;
     }
+
+
 
 
     public void shareIntent(Context context, ArrayList<Uri> imagesUri, boolean whatsAppOnly) {
@@ -280,8 +281,6 @@ public class util {
         }
         return allSystemSpecification;
     }
-
-
 
 
 }
