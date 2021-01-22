@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,7 +69,10 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
         /**
          * get Bundles
          */
-
+        /**
+         * Map Components
+         */
+        FloatingActionButton addImagesButton = findViewById(R.id.addNewSpec);
         Bundle b = getIntent().getExtras();
         if (b != null) {
             carName = b.getString("CarName");
@@ -78,13 +82,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
          * Update Activity Title According to Car Name
          */
         setTitle(carName);
-        /**
-         * Map Components
-         */
-        /**
-         * Variables Declarations
-         */
-        FloatingActionButton addImagesButton = findViewById(R.id.addNewSpec);
+
         addImagesButton.setOnClickListener(this);
         imagesContainer = findViewById(R.id.specificationContainer);
         loadImages(0);
@@ -112,21 +110,33 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
             if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
                 //  Add One Image
                 if (data.getData() != null) {
-                    try {
-                        Uri mImageUri = data.getData();
-                        int id = util.getInstance().getMaximum("id", "carImages");
-                        long result = CarImage.addCarImageRelation(relationId, util.getInstance().saveToInternalStorage(this, MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri), "colorImages", relationId + new Date().getTime() + ".png"), id);
-                        if (result > 0) {
-                            Toast.makeText(getApplicationContext(), R.string.add_image_success_msg, Toast.LENGTH_SHORT).show();
-                            loadImages(id);
-                        } else if (result == -1) {
-                            Toast.makeText(getApplicationContext(), R.string.duplicate_image_error_msg, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
+                    loaderDialog.displayLoader();
+                    new CloseLoaderThread(new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Uri mImageUri = data.getData();
+                                final int id = util.getInstance().getMaximum("id", "carImages");
+                                final long result = CarImage.addCarImageRelation(relationId, util.getInstance().saveToInternalStorage(CarColorImages.this, MediaStore.Images.Media.getBitmap(CarColorImages.this.getContentResolver(), mImageUri), "colorImages", relationId + new Date().getTime() + ".png"), id);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (result > 0) {
+                                            Toast.makeText(getApplicationContext(), R.string.add_image_success_msg, Toast.LENGTH_SHORT).show();
+                                            loadImages(id);
+                                        } else if (result == -1) {
+                                            Toast.makeText(getApplicationContext(), R.string.duplicate_image_error_msg, Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), R.string.image_file_does_notExists, Toast.LENGTH_SHORT).show();
-                    }
+                    }), loaderDialog).start();
+
 
                 } else {
                     //  Add Multible Images
@@ -307,8 +317,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                     // Remove View From UI
                     ((FlexboxLayout) selectedIds.get(currentId).getParent()).removeView(selectedIds.get(currentId));
                     //    Remove View From Silder
-
-                    ScreenSlidePagerAdapter.images.remove(selectedIds.get(currentId).getCarImageObj());
+                    ScreenSlidePagerAdapter.images.remove(selectedIds.get(currentId));
                     imagesPathsToDelete.add(selectedIds.get(currentId).getCarImageObj().getImgPath());
                     sb.append(currentId + (itr.hasNext() ? "," : ""));
                 }

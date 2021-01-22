@@ -36,7 +36,7 @@
     <string name="car_hourse_power_required_msg">يجب ادخال قوة الماتور بالاحصنة</string>
     <string name="car_motor_capacity_required_msg">يجب ادخال سعة الماتور</string>
     <string name="car_bag_space_required_msg">يجب ادخال سعة الحقيبة</string>
-    <string name="car_numerical_constraint">يجب ادخال سعة الحقيبة</string>
+    <string name="car_numerical_constraint">عدد الاحصنة,سعة الماتور و سعة الحقيبة يجب ان يكونوا ارقام موجبة فقط!</string>
     <string name="add_car_success_msg">تم اضافة السيارة بنجاح</string>
     <!--  Update  -->
     <string name="update_car_success_msg">تم تعديل السيارة بنجاح</string>
@@ -44,7 +44,7 @@
     <!--  Delete  -->
     <string name="delete_car_dialog_title">حذف السيارة؟</string>
     <string name="delete_car_dialog_msg">فئات السيارة, الوانها و صورها سيتم حذفها ايضاً</string>
-    <string name="delete_car_success_msg">عدد الاحصنة,سعة الماتور و سعة الحقيبة يجب ان يكونوا ارقام موجبة فقط!</string>
+    <string name="delete_car_success_msg">تم حذف السيارة بنجاح</string>
     <!-- End Car Section    -->
 
     <!-- Start Images Section    -->
@@ -63,6 +63,9 @@
     <!-- End Images Section    -->
 
     <!-- Start Colors Section    -->
+    <!--    UI-->
+    <string name="cars_colors_title"> الالوان</string>
+    <string name="cars_colors_empty_msg">لا يوجد الوان</string>
     <!--    Add -->
     <string name="add_color_success_msg">تم اضافة اللون بنجاح</string>
     <!--    Update -->
@@ -75,6 +78,8 @@
 
     <!-- Start Category Section    -->
     <!--    UI-->
+    <string name="cars_categories_empty_msg">لا يوجد فئات</string>
+    <string name="cars_category_title">الفئات</string>
     <string name="add_new_category_label">اضافة فئة جديدة</string>
     <string name="category_name_placeholder">اسم الفئة</string>
     <!--    Add -->

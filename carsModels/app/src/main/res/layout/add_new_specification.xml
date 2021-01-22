@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:minWidth="500dp"
     tools:context=".Speceficeations.SpecificationCuDialogFragment"
     >
     <ScrollView
@@ -26,8 +27,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imageView"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:layout_marginStart="113dp"
                     android:layout_marginTop="38dp"
@@ -43,9 +44,9 @@
                     android:id="@+id/addImageButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="?attr/colorPrimary"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:backgroundTint="@color/colorPrimary"
                     android:clickable="true"
                     android:focusable="true"
                     android:src="@drawable/image"
@@ -73,7 +74,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="20dp">
+                android:paddingBottom="75dp">
 
                 <Button
                     android:id="@+id/addButton"

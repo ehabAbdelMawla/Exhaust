@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +28,7 @@ import com.example.carsmodels.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,8 +102,6 @@ public class util {
     }
 
 
-
-
     public void shareIntent(Context context, ArrayList<Uri> imagesUri, boolean whatsAppOnly) {
         Intent whatsappIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         if (whatsAppOnly) {
@@ -148,6 +151,32 @@ public class util {
     /**
      * Files
      */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public Bitmap rotateImage(Context context, Bitmap bitmap, Uri selectedImage) {
+        try {
+            InputStream input = context.getContentResolver().openInputStream(selectedImage);
+            ExifInterface exifInterface = null;
+            exifInterface = new ExifInterface(input);
+            int oriantation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            Matrix matrix = new Matrix();
+            switch (oriantation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.setRotate(90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    matrix.setRotate(270);
+                    break;
+                default:
+                    return bitmap;
+            }
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+
     public String saveToInternalStorage(Context context, final Bitmap bitmapImage, String folderName, String imageName) {
         /**
          *         ==>   Internal Dirs

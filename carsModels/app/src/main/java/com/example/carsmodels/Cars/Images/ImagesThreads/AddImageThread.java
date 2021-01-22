@@ -2,9 +2,13 @@ package com.example.carsmodels.Cars.Images.ImagesThreads;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.carsmodels.DataModel.CarImage;
 import com.example.carsmodels.util.util;
@@ -46,7 +50,12 @@ public class AddImageThread extends Thread {
      */
     public void run() {
         try {
-            long result = CarImage.addCarImageRelation(relationId, util.getInstance().saveToInternalStorage(AddImageThread.context, MediaStore.Images.Media.getBitmap(AddImageThread.context.getContentResolver(), uri), "colorImages", relationId + "_" + new Date().getTime() + ".png"), this.id);
+            Bitmap image = MediaStore.Images.Media.getBitmap(AddImageThread.context.getContentResolver(), uri);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                image = util.getInstance().rotateImage(AddImageThread.context, image, uri);
+            }
+
+            long result = CarImage.addCarImageRelation(relationId, util.getInstance().saveToInternalStorage(AddImageThread.context, image, "colorImages", relationId + "_" + new Date().getTime() + ".png"), this.id);
             if (result == -1) {
                 operationResults[1] += 1;
             } else if (result < 0) {
@@ -54,7 +63,7 @@ public class AddImageThread extends Thread {
             }
             AddImageThread.progressBar.setProgress(++AddImageThread.progressValue);
         } catch (Exception ex) {
-            Log.i(getClass().getName(),"Exception "+ex);
+            Log.i(getClass().getName(), "Exception " + ex);
         }
     }
 

@@ -1,190 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Cars.AddNewCarActivity">
 
-    <ScrollView
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="500dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="25dp"
+                android:src="@drawable/placholder"
+                app:civ_border_width="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="4dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/image"
+                app:borderWidth="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintEnd_toEndOf="@+id/imageView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/carName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:autofillHints=""
+            android:focusable="auto"
+            android:gravity="center"
+            android:hint="@string/car_name_placeholder"
+            android:inputType="textPersonName"
+            android:textColorHighlight="#FFFFFF"
+            android:textCursorDrawable="@null" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="185dp"
-                    android:layout_height="185dp"
-                    android:layout_marginStart="113dp"
-                    android:layout_marginTop="38dp"
-                    android:layout_marginEnd="113dp"
-                    android:src="@drawable/placholder"
-                    app:civ_border_width="2dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/carCountryOrigin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:autofillHints=""
+            android:focusable="auto"
+            android:gravity="center"
+            android:hint="@string/car_country_placeholder"
+            android:inputType="textPersonName"
+            android:textColorLink="@color/colorPrimary"
+            android:textCursorDrawable="@null" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/addImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="4dp"
-                    android:backgroundTint="@color/colorPrimary"
-                    app:borderWidth="0dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/image"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:textAlignment="center"
+            android:weightSum="2">
 
             <EditText
-                android:id="@+id/carName"
+                android:id="@+id/hoursePower"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 android:autofillHints=""
                 android:focusable="auto"
                 android:gravity="center"
-                android:hint="@string/car_name_placeholder"
-                android:inputType="textPersonName"
-                android:textColorHighlight="#FFFFFF"
-                android:textCursorDrawable="@null" />
-
-
-
-            <EditText
-                android:id="@+id/carCountryOrigin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:autofillHints=""
-                android:focusable="auto"
-                android:gravity="center"
-                android:hint="@string/car_country_placeholder"
-                android:inputType="textPersonName"
+                android:hint="@string/car_hourse_power_placeholder"
+                android:inputType="number"
                 android:textColorLink="@color/colorPrimary"
                 android:textCursorDrawable="@null" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/motorCapacity"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:autofillHints=""
+                android:focusable="auto"
+                android:gravity="center"
+                android:hint="@string/car_motor_capacity_placeholder"
+                android:inputType="number"
+                android:textColorLink="@color/colorPrimary"
+                android:textCursorDrawable="@null" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <EditText
+                android:id="@+id/bagSpace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="14dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:baselineAligned="false"
+                android:focusable="auto"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:textAlignment="center"
-                android:weightSum="2">
+                android:hint="@string/car_bag_space_placeholder"
+                android:inputType="number"
+                android:maxWidth="200dp"
+                android:textColorLink="@color/colorPrimary"
+                android:textCursorDrawable="@null" />
 
-                <EditText
-                    android:id="@+id/hoursePower"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:autofillHints=""
-                    android:focusable="auto"
-                    android:gravity="center"
-                    android:hint="@string/car_hourse_power_placeholder"
-                    android:inputType="number"
-                    android:textColorLink="@color/colorPrimary"
-                    android:textCursorDrawable="@null" />
-
-                <EditText
-                    android:id="@+id/motorCapacity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-
-                    android:autofillHints=""
-                    android:focusable="auto"
-                    android:gravity="center"
-                    android:hint="@string/car_motor_capacity_placeholder"
-                    android:inputType="number"
-                    android:textColorLink="@color/colorPrimary"
-                    android:textCursorDrawable="@null" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <EditText
-                    android:id="@+id/bagSpace"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:autofillHints=""
-                    android:baselineAligned="false"
-                    android:focusable="auto"
-                    android:gravity="center"
-                    android:hint="@string/car_bag_space_placeholder"
-                    android:inputType="number"
-                    android:maxWidth="200dp"
-                    android:textColorLink="@color/colorPrimary"
-                    android:textCursorDrawable="@null" />
-
-
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="20dp">
-
-                <Button
-                    android:id="@+id/addButton"
-                    android:layout_width="185dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="113dp"
-                    android:layout_marginLeft="113dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginEnd="113dp"
-                    android:layout_marginRight="113dp"
-                    android:background="@drawable/rounded_button"
-                    android:padding="10dp"
-                    android:text="@string/add"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:textAllCaps="true"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/rounded_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            android:text="@string/add"
+            android:textAllCaps="true"
+            android:textColor="@color/wordColorPrimary"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</ScrollView>

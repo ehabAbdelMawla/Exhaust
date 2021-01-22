@@ -1,71 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Cars.CarCategory.CategoryAddAndUpdateFragment"
-    >
+    android:focusable="auto"
+    android:focusableInTouchMode="true"
+    tools:context=".Cars.CarCategory.CategoryAddAndUpdateFragment">
 
-    <ScrollView
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:focusable="auto"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:textAlignment="center">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:minWidth="500dp">
 
             <EditText
                 android:id="@+id/categName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
                 android:hint="@string/category_name_placeholder"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/specificationsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="75dp"
+                android:paddingBottom="15dp"
                 android:textAlignment="center"
                 app:alignContent="flex_start"
                 app:alignItems="stretch"
                 app:flexDirection="column"
                 app:flexWrap="nowrap"
-                app:justifyContent="center">
+                app:justifyContent="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/categName">
 
             </com.google.android.flexbox.FlexboxLayout>
+
             <Button
                 android:id="@+id/addButton"
-                android:layout_width="185dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="113dp"
-                android:layout_marginLeft="113dp"
-                android:layout_marginTop="25dp"
-                android:layout_marginEnd="113dp"
-                android:layout_marginRight="113dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/rounded_button"
-                android:focusable="auto"
-                android:focusableInTouchMode="true"
+                android:minWidth="150dp"
                 android:padding="10dp"
                 android:text="@string/add"
                 android:textAllCaps="true"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/wordColorSecondary"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/specificationsContainer" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</ScrollView>
 
-        </LinearLayout>
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>

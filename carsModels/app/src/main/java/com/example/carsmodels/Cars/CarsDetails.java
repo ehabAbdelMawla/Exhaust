@@ -8,11 +8,9 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -26,11 +24,11 @@ import com.example.carsmodels.DataModel.CarCategoty;
 import com.example.carsmodels.DataModel.CarColor;
 import com.example.carsmodels.util.AnimatedActivity;
 import com.example.carsmodels.util.util;
+import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.carsmodels.Main.MainActivity.db;
@@ -47,6 +45,7 @@ public class CarsDetails extends AnimatedActivity {
      */
     private FlexboxLayout carCategoriesContainer;
     private final int ADD_NEW_CATEGORY = 100;
+    protected TextView emptyTextViewForCategories;
 
     /**
      * Activity LifeCycle Events
@@ -54,7 +53,7 @@ public class CarsDetails extends AnimatedActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.car_categories);
+        setContentView(R.layout.car_details);
         /**
          * load specification in static Map
          */
@@ -93,9 +92,12 @@ public class CarsDetails extends AnimatedActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_NEW_CATEGORY && resultCode == Activity.RESULT_OK && data != null) {
             CarCategoty newObj = (CarCategoty) data.getSerializableExtra("newObj");
-            carCategoriesContainer.addView(new customeCategoryView(this, newObj));
+            addViewWithAnimate(carCategoriesContainer, new customeCategoryView(this, newObj), Techniques.ZoomInUp, 350);
+            carCategoriesContainer.setAlignItems(AlignItems.STRETCH);
+            checkIfEmpty(carCategoriesContainer.getChildCount() == 0, carCategoriesContainer, R.string.cars_categories_empty_msg);
         }
     }
+
 
 
     /**
@@ -168,17 +170,18 @@ public class CarsDetails extends AnimatedActivity {
      */
     private void loadInitData() {
         //        Set Car Basic info components
-        if (currentCar != null && currentCar.getImg() != null && !currentCar.getImg().trim().equals("")) {
-            util.getInstance().setGlideImage(this, currentCar.getImg(), (ImageView) findViewById(R.id.carImage));
-        }
-        util.getInstance().setTextViewValue((TextView) findViewById(R.id.carName),currentCar.getCarName());
-        util.getInstance().setTextViewValue((TextView) findViewById(R.id.carCountryOrigin),currentCar.getCountry());
-        util.getInstance().setTextViewValue((TextView) findViewById(R.id.hoursePower),currentCar.getHoursePower() + " HP");
-        util.getInstance().setTextViewValue((TextView) findViewById(R.id.motorCapacity),currentCar.getMotorCapacity() + " CC");
-        util.getInstance().setTextViewValue((TextView) findViewById(R.id.bagSpace),currentCar.getBagSpace() + " L");
+        //       TODO Delete CarName TextView & carImage  Access After UI
+//        if (currentCar != null && currentCar.getImg() != null && !currentCar.getImg().trim().equals("")) {
+//            util.getInstance().setGlideImage(this, currentCar.getImg(), (ImageView) findViewById(R.id.carImage));
+//        }
+//        util.getInstance().setTextViewValue((TextView) findViewById(R.id.carName),currentCar.getCarName());
+        util.getInstance().setTextViewValue((TextView) findViewById(R.id.carCountryOrigin), currentCar.getCountry());
+        util.getInstance().setTextViewValue((TextView) findViewById(R.id.hoursePower), currentCar.getHoursePower() + " HP");
+        util.getInstance().setTextViewValue((TextView) findViewById(R.id.motorCapacity), currentCar.getMotorCapacity() + " CC");
+        util.getInstance().setTextViewValue((TextView) findViewById(R.id.bagSpace), currentCar.getBagSpace() + " L");
         this.setTitle(currentCar.getCarName());
-        loadCarColors();
         loadCarsCategories();
+        loadCarColors();
     }
 
     /**
@@ -189,15 +192,17 @@ public class CarsDetails extends AnimatedActivity {
         colorsContainer.removeAllViews();
         ArrayList<CarColor> carColors = currentCar.getCarColors();
         for (final CarColor color : carColors) {
-            CustomeColorView colorView = new CustomeColorView(CarsDetails.this, color, currentCar.getId(), currentCar.getCarName());
-            colorsContainer.addView(colorView);
+            addViewWithAnimate(colorsContainer, new CustomeColorView(CarsDetails.this, color, currentCar.getId(), currentCar.getCarName()),
+                    Techniques.ZoomInUp, 350);
         }
+        checkIfEmpty(colorsContainer.getChildCount() == 0, colorsContainer, R.string.cars_colors_empty_msg);
     }
 
     public void addColor(CarColor carColorObj) {
         final FlexboxLayout colorsContainer = findViewById(R.id.carColors);
-        CustomeColorView colorView = new CustomeColorView(CarsDetails.this, carColorObj, currentCar.getId(), currentCar.getCarName());
-        colorsContainer.addView(colorView);
+        addViewWithAnimate(colorsContainer, new CustomeColorView(CarsDetails.this, carColorObj, currentCar.getId(), currentCar.getCarName()),
+                Techniques.ZoomInUp, 350);
+        checkIfEmpty(colorsContainer.getChildCount() == 0, colorsContainer, R.string.cars_colors_empty_msg);
     }
 
 
@@ -211,8 +216,12 @@ public class CarsDetails extends AnimatedActivity {
         carCategoriesContainer.removeAllViews();
         ArrayList<CarCategoty> categories = getcategories();
         for (final CarCategoty category : categories) {
-            carCategoriesContainer.addView(new customeCategoryView(this, category));
+            addViewWithAnimate(carCategoriesContainer, new customeCategoryView(this, category), Techniques.ZoomInUp, 350);
         }
+        if(carCategoriesContainer.getChildCount() > 0){
+            carCategoriesContainer.setAlignItems(AlignItems.STRETCH);
+        }
+        checkIfEmpty(carCategoriesContainer.getChildCount() == 0, carCategoriesContainer, R.string.cars_categories_empty_msg);
     }
 
     private ArrayList<CarCategoty> getcategories() {
@@ -244,7 +253,6 @@ public class CarsDetails extends AnimatedActivity {
     public static Car getCurrentCar() {
         return currentCar;
     }
-
 
 
 }

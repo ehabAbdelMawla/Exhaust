@@ -77,24 +77,24 @@ public class Car implements Serializable {
         this.country = country;
     }
 
-    public double getMotorCapacity() {
-        return motorCapacity;
+    public int getMotorCapacity() {
+        return  (int)motorCapacity;
     }
 
     public void setMotorCapacity(double motorCapacity) {
         this.motorCapacity = motorCapacity;
     }
 
-    public double getHoursePower() {
-        return hoursePower;
+    public int getHoursePower() {
+        return (int)hoursePower;
     }
 
     public void setHoursePower(double hoursePower) {
         this.hoursePower = hoursePower;
     }
 
-    public double getBagSpace() {
-        return bagSpace;
+    public int getBagSpace() {
+        return (int)bagSpace;
     }
 
     public void setBagSpace(double bagSpace) {

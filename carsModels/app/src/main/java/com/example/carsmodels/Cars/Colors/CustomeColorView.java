@@ -12,9 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.daimajia.androidanimations.library.Techniques;
 import com.example.carsmodels.Cars.Images.CarColorImages;
 import com.example.carsmodels.DataModel.CarColor;
 import com.example.carsmodels.R;
+import com.example.carsmodels.util.AnimatedActivity;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
 import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
@@ -104,7 +106,8 @@ public class CustomeColorView extends ConstraintLayout implements View.OnClickLi
                             public void onClick(DialogInterface dialog, int which) {
                                 CarColor.removeRelation(colorObj.getRealtionId());
                                 Toast.makeText(CustomeColorView.this.getContext(), R.string.delete_color_success_msg, Toast.LENGTH_LONG).show();
-                                ((FlexboxLayout) CustomeColorView.this.getParent()).removeView(CustomeColorView.this);
+                                FlexboxLayout parent = (FlexboxLayout) CustomeColorView.this.getParent();
+                                ((AnimatedActivity)activity).removeViewWithAnimate(parent,CustomeColorView.this, Techniques.ZoomOutDown,350, R.string.cars_colors_empty_msg);
                             }
                         }.show();
                         break;

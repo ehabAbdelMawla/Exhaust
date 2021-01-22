@@ -1,6 +1,5 @@
 package com.example.carsmodels.Brands;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.example.carsmodels.Cars.AddNewCarActivity;
@@ -28,7 +26,6 @@ import com.example.carsmodels.util.Dialogs.ConfirmDialog;
 import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -122,7 +119,6 @@ public class BrandDetails extends AnimatedActivity {
                 });
             }
         }), loaderDialog).start();
-
     }
 
     public void addCar(final Car currentObj) {

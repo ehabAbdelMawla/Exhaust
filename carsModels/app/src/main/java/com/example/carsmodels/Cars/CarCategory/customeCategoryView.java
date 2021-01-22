@@ -12,12 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.daimajia.androidanimations.library.Techniques;
 import com.example.carsmodels.Cars.CarsDetails;
 import com.example.carsmodels.DataModel.CarCategoty;
 import com.example.carsmodels.R;
+import com.example.carsmodels.util.AnimatedActivity;
 import com.example.carsmodels.util.Dialogs.ConfirmDialog;
 import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
+import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.Map;
@@ -46,6 +49,7 @@ public class customeCategoryView extends ConstraintLayout implements View.OnLong
         setOnLongClickListener(this);
 
     }
+
 
     public CarCategoty getCategory() {
         return category;
@@ -89,7 +93,13 @@ public class customeCategoryView extends ConstraintLayout implements View.OnLong
                                 long result = category.remove();
                                 if (result == 1) {
                                     Toast.makeText(parentActivity, R.string.delete_category_success_msg, Toast.LENGTH_SHORT).show();
-                                    ((FlexboxLayout) customeCategoryView.this.getParent()).removeView(customeCategoryView.this);
+                                    FlexboxLayout parent = ((FlexboxLayout) customeCategoryView.this.getParent());
+                                    boolean isLastOne = parent.getChildCount() == 1;
+                                    ((AnimatedActivity) parentActivity).removeViewWithAnimate(parent, customeCategoryView.this, Techniques.ZoomOutDown, 350, R.string.cars_categories_empty_msg);
+                                    if (isLastOne) {
+                                        parent.setAlignItems(AlignItems.CENTER);
+                                    }
+
                                 } else {
                                     Toast.makeText(parentActivity, R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                                 }

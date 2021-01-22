@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#005AA7</color>
-    <color name="layerColor">#2c3e50</color>
-    <color name="wordColor">#EEEEEE</color>
+    <color name="layerColor">#222</color>
+    <color name="wordColorPrimary">#ddd</color>
+    <color name="wordColorSecondary">#FFFFFF</color>
     <color name="colorPrimaryDark">#2c3e50</color>
     <color name="colorAccent">#2c3e50</color>
 </resources>
