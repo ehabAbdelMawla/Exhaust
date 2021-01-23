@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">احمد</string>
+    <string name="app_name">Exhaust</string>
     <!-- Start Brand Section    -->
     <!--UI-->
     <string name="brand_empty_msg">لا يوجد انواع.</string>
@@ -48,6 +48,8 @@
     <!-- End Car Section    -->
 
     <!-- Start Images Section    -->
+    <!--    UI-->
+    <string name="empty_image__msg">لا يوجد صور</string>
     <!--    Delete-->
     <string name="delete_images_dialog_title">حذف  %1$d صورة؟</string>
     <string name="delete_images_success_msg">تم حذف  %1$d صورة</string>

@@ -14,14 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".Main.MainActivity">
+        <activity android:name=".Splash.splash" android:theme="@style/SplashStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Main.MainActivity" />
         <activity android:name=".Brands.AddNewBrandActivity" android:label="@string/add_brand_label"/>
         <activity android:name=".Brands.BrandDetails" />
         <activity android:name=".Cars.AddNewCarActivity" android:label="@string/add_car_label"/>

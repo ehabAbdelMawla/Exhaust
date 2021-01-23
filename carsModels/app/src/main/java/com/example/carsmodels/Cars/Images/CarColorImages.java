@@ -24,6 +24,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.daimajia.androidanimations.library.zooming_entrances.ZoomInAnimator;
 import com.example.carsmodels.Cars.Images.ImageViewPager.FullView;
 import com.example.carsmodels.Cars.Images.ImageViewPager.ScreenSlidePagerAdapter;
@@ -94,6 +96,8 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
     @Override
     protected void onStop() {
         super.onStop();
+        YoYo.with(Techniques.ZoomInUp)
+                .duration(500).playOn(findViewById(R.id.addNewSpec));
         selectedIds.clear();
     }
 
@@ -227,9 +231,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
      */
     private void loadImages(int startId) {
         loaderDialog.displayLoader();
-
         final StringBuilder sqlStat = new StringBuilder("SELECT * FROM carImages WHERE relationId=" + relationId);
-
         if (startId <= 0) {
             /**
              * Clear Images Container
@@ -238,7 +240,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
             imagesContainer.removeAllViews();
             ScreenSlidePagerAdapter.images.clear();
         } else {
-            sqlStat.append(" And id>=" + startId);
+            sqlStat.append(" And id>=").append(startId);
         }
         final Thread loadImagesThread = new Thread(new Runnable() {
             @Override
@@ -256,15 +258,24 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                         @Override
                         public void run() {
                             util.getInstance().setGlideImage(CarColorImages.this, imgObj.getImgPath(), ImageViewParent.getImage());
-                            imagesContainer.addView(ImageViewParent);
+                            addViewWithAnimate(imagesContainer, ImageViewParent, Techniques.ZoomInUp, 350);
+
                         }
                     });
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkIfEmpty(imagesContainer.getChildCount() == 0, imagesContainer, R.string.empty_image__msg);
+                    }
+                });
+
             }
         });
         new CloseLoaderThread(loadImagesThread, loaderDialog).start();
-    }
 
+
+    }
 
 
     /**
@@ -323,7 +334,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                 while (itr.hasNext()) {
                     currentId = itr.next();
                     // Remove View From UI
-                    ((FlexboxLayout) selectedIds.get(currentId).getParent()).removeView(selectedIds.get(currentId));
+                    removeViewWithAnimate(imagesContainer, selectedIds.get(currentId), Techniques.ZoomOutDown, 250, R.string.empty_image__msg);
                     //    Remove View From Silder
                     ScreenSlidePagerAdapter.images.remove(selectedIds.get(currentId));
                     imagesPathsToDelete.add(selectedIds.get(currentId).getCarImageObj().getImgPath());

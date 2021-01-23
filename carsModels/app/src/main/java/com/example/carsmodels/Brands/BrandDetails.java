@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.carsmodels.Cars.AddNewCarActivity;
 import com.example.carsmodels.Cars.CarsDetails;
 import com.example.carsmodels.Cars.CarsAddAndUpdateFragment;
@@ -54,6 +55,14 @@ public class BrandDetails extends AnimatedActivity {
         brandCarContainer = findViewById(R.id.brandCarContainer);
         setButtonActions();
         loadInitData();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        YoYo.with(Techniques.ZoomIn)
+                .duration(500).playOn(findViewById(R.id.addCarButton));
+
     }
 
     @Override

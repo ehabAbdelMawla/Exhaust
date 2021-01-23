@@ -81,7 +81,7 @@ public class MainActivity extends AnimatedActivity {
     private void hideButtonsList() {
         findViewById(R.id.addBrandButton).setVisibility(View.INVISIBLE);
         findViewById(R.id.specButton).setVisibility(View.INVISIBLE);
-        YoYo.with(Techniques.SlideInUp)
+        YoYo.with(Techniques.ZoomInUp)
                 .duration(500).playOn(findViewById(R.id.listButton));
     }
 

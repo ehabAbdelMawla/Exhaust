@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ahmed</string>
+    <string name="app_name">Exhaust</string>
     <!-- Start Brand Section    -->
     <!--UI-->
     <string name="brand_empty_msg">No Brands Added yet.</string>
@@ -47,6 +47,8 @@
     <!-- End Car Section    -->
 
     <!-- Start Images Section    -->
+    <!--    UI-->
+    <string name="empty_image__msg">No Image Added yet.</string>
     <!--    Delete-->
     <string name="delete_images_dialog_title">Delete  %1$d Images?</string>
     <string name="delete_images_success_msg">%1$d Image Deleted</string>

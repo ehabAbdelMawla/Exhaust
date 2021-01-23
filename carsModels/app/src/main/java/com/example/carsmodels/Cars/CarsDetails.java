@@ -81,7 +81,13 @@ public class CarsDetails extends AnimatedActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        YoYo.with(Techniques.ZoomInUp)
+                .duration(500).playOn(findViewById(R.id.listButton));
+        YoYo.with(Techniques.ZoomInUp)
+                .duration(500).playOn(findViewById(R.id.headerParent));
+
         hideOptionsButtons();
+
     }
 
     /**
@@ -97,7 +103,6 @@ public class CarsDetails extends AnimatedActivity {
             checkIfEmpty(carCategoriesContainer.getChildCount() == 0, carCategoriesContainer, R.string.cars_categories_empty_msg);
         }
     }
-
 
 
     /**
@@ -218,7 +223,7 @@ public class CarsDetails extends AnimatedActivity {
         for (final CarCategoty category : categories) {
             addViewWithAnimate(carCategoriesContainer, new customeCategoryView(this, category), Techniques.ZoomInUp, 350);
         }
-        if(carCategoriesContainer.getChildCount() > 0){
+        if (carCategoriesContainer.getChildCount() > 0) {
             carCategoriesContainer.setAlignItems(AlignItems.STRETCH);
         }
         checkIfEmpty(carCategoriesContainer.getChildCount() == 0, carCategoriesContainer, R.string.cars_categories_empty_msg);
