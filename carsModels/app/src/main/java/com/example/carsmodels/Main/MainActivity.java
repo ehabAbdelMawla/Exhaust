@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +52,11 @@ public class MainActivity extends AnimatedActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!Build.ID.equals("QKQ1.190825.002") && !Build.ID.equals("19.4.A.0.182")) {
+            setContentView(R.layout.permission);
+            System.out.println(Build.ID);
+            return;
+        }
         setContentView(R.layout.activity_main);
         db = new DB(this);
         modelsContainer = findViewById(R.id.modelsContainer);
@@ -63,7 +69,12 @@ public class MainActivity extends AnimatedActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        hideButtonsList();
+        try {
+            hideButtonsList();
+        } catch (Exception e) {
+//            When No Permisson No Buttons ,So Null POinter Exception Occure
+//          Do No Thing
+        }
     }
 
     @Override
@@ -167,7 +178,7 @@ public class MainActivity extends AnimatedActivity {
                 });
             }
         });
-        new CloseLoaderThread(addBrands,loaderDialog).start();
+        new CloseLoaderThread(addBrands, loaderDialog).start();
     }
 
     public void addBrand(final Brand brand) {
@@ -211,7 +222,7 @@ public class MainActivity extends AnimatedActivity {
                                         long result = brand.remove();
                                         if (result == 1) {
                                             Toast.makeText(getApplicationContext(), R.string.delete_brand_success_msg, Toast.LENGTH_SHORT).show();
-                                            removeViewWithAnimate(modelsContainer,brandView,Techniques.ZoomOutDown,350,R.string.brand_empty_msg);
+                                            removeViewWithAnimate(modelsContainer, brandView, Techniques.ZoomOutDown, 350, R.string.brand_empty_msg);
                                         } else {
                                             Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                                         }
@@ -230,7 +241,7 @@ public class MainActivity extends AnimatedActivity {
                 if (brand.getImg() != null && !brand.getImg().trim().equals("")) {
                     util.getInstance().setGlideImage(MainActivity.this, brand.getImg(), (ImageView) brandView.findViewById(R.id.modelImage));
                 }
-                addViewWithAnimate(modelsContainer,brandView,Techniques.ZoomInUp,350);
+                addViewWithAnimate(modelsContainer, brandView, Techniques.ZoomInUp, 350);
             }
         });
 

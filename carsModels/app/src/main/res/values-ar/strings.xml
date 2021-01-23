@@ -120,4 +120,5 @@
     <string name="add">اضافة</string>
     <string name="update">تعديل</string>
     <string name="loading">تحميل . . .</string>
+    <string name="permission_msg">غير مسموح!</string>
 </resources>
