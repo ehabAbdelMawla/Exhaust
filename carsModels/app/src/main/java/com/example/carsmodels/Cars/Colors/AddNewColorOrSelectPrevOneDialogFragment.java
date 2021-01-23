@@ -80,9 +80,12 @@ public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Color Color = new Color(Integer.toHexString(colorPickerView.getSelectedColor()));
-                Color.insert();
-                addAction(updateMode, relationId, Color);
+                Color color = new Color(Integer.toHexString(colorPickerView.getSelectedColor()));
+                long result = color.insert();
+                if (result == -1) {
+                    color = Color.getColorOfHex(Integer.toHexString(colorPickerView.getSelectedColor()));
+                }
+                addAction(updateMode, relationId, color);
             }
         });
         return rootView;
@@ -118,7 +121,7 @@ public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
                     }
                 });
                 colorsContainer.addView(colorLayOut);
-            }catch(Exception e){
+            } catch (Exception e) {
                 Log.i("colorFragment", "loadColors -> ", e);
             }
 
@@ -128,6 +131,12 @@ public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
 
     public void addAction(boolean updateMode, int relationId, Color Color) {
         try {
+            System.out.println("updateMode 1" + updateMode);
+            System.out.println("updateMode 2" + updateMode);
+
+            System.out.println("relationId 1" + relationId);
+            System.out.println("relationId 2" + relationId);
+
             // ..... DataBase Effect .....
             long result = updateMode ?
                     CarColor.updateColorRelation(existReplationId, Color.getColorId()) :
@@ -143,10 +152,10 @@ public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
             if (updateMode) {
                 ((FlexboxLayout) customeColorView.getParent()).removeView(customeColorView);
             }
-            if (result > 0){
+            if (result > 0) {
                 ((CarsDetails) Objects.requireNonNull(getActivity())).addColor(new CarColor(relationId, carId, Color.getColorId(), Color.getColorHexCode().replace("#", "")));
             }
-            
+
         } catch (Exception e) {
             Log.i("colorFragment", "addAction -> ", e);
         }
@@ -154,7 +163,7 @@ public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
 
     public void showToast(long result, boolean updateMode) {
         if (result > 0) {
-            Toast.makeText(getActivity(), updateMode ? R.string.update_color_success_msg: R.string.add_color_success_msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), updateMode ? R.string.update_color_success_msg : R.string.add_color_success_msg, Toast.LENGTH_SHORT).show();
         } else if (result == -1) {
             Toast.makeText(getActivity(), R.string.color_duplicated_msg, Toast.LENGTH_SHORT).show();
         } else {

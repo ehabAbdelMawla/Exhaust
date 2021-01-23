@@ -29,6 +29,7 @@ public class Color {
         this.colorHexCode = colorHexCode;
     }
 
+
     /**
      * Getters & Setters
      */
@@ -92,6 +93,7 @@ public class Color {
 
     /**
      * Class Methods
+     *
      * @return araryList of all colors that declared in  system
      */
 
@@ -109,5 +111,20 @@ public class Color {
         return colors;
     }
 
+
+    public static Color getColorOfHex(String toHexString) {
+        Color exitsOne = null;
+        try {
+            Cursor res = MainActivity.db.getReadableDatabase().rawQuery(String.format("SELECT * FROM colors WHERE color='%s'", toHexString), null);
+            while (res.moveToNext()) {
+                exitsOne = new Color(res.getInt(res.getColumnIndex("id")),
+                        res.getString(res.getColumnIndex("color")));
+            }
+        } catch (Exception e) {
+            Log.i(Color.class.getName(), "getColorOfHex", e);
+        }
+
+        return exitsOne;
+    }
 
 }
