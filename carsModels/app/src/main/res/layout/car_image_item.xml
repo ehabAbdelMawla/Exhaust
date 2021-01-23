@@ -9,18 +9,17 @@
 
     <ImageView
         android:id="@+id/ImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:background="#222222"
         android:foregroundGravity="center"
-        android:maxWidth="150dp"
-        android:maxHeight="150dp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/placholder"
-        android:scaleType="center"/>
+        android:scaleType="centerCrop"/>
 
     <RadioButton
         android:id="@+id/selectedRadio"

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -46,6 +47,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import static com.example.carsmodels.Cars.Images.ImageViewPager.ScreenSlidePagerAdapter.updateIndicesOfImageViewList;
 
 public class CarColorImages extends AnimatedActivity implements View.OnClickListener, View.OnLongClickListener {
     /**
@@ -116,8 +119,11 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                         public void run() {
                             try {
                                 Uri mImageUri = data.getData();
+                                Bitmap image = MediaStore.Images.Media.getBitmap(CarColorImages.this.getContentResolver(), mImageUri);
+                                image = util.getInstance().rotateImage(CarColorImages.this, image, mImageUri);
                                 final int id = util.getInstance().getMaximum("id", "carImages");
-                                final long result = CarImage.addCarImageRelation(relationId, util.getInstance().saveToInternalStorage(CarColorImages.this, MediaStore.Images.Media.getBitmap(CarColorImages.this.getContentResolver(), mImageUri), "colorImages", relationId + new Date().getTime() + ".png"), id);
+
+                                final long result = CarImage.addCarImageRelation(relationId, util.getInstance().saveToInternalStorage(CarColorImages.this, image, "colorImages", relationId + new Date().getTime() + ".png"), id);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -259,6 +265,8 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
         new CloseLoaderThread(loadImagesThread, loaderDialog).start();
     }
 
+
+
     /**
      * Action Bar Actions
      */
@@ -321,6 +329,7 @@ public class CarColorImages extends AnimatedActivity implements View.OnClickList
                     imagesPathsToDelete.add(selectedIds.get(currentId).getCarImageObj().getImgPath());
                     sb.append(currentId + (itr.hasNext() ? "," : ""));
                 }
+                updateIndicesOfImageViewList();
                 util.getInstance().removeFiles(imagesPathsToDelete);
                 util.getInstance().deleteImagesWithIds(sb.toString());
                 clearSelectionMode();

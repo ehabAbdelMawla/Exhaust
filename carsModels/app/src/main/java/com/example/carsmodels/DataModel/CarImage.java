@@ -84,7 +84,7 @@ public class CarImage {
         return 0;
     }
 
-   synchronized public static long addCarImageRelation(int relationId, String img, int id) {
+    public static long addCarImageRelation(int relationId, String img, int id) {
         try {
             SQLiteDatabase databaseWriteable = MainActivity.db.getWritableDatabase();
             ContentValues myValues = new ContentValues();

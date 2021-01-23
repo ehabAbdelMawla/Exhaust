@@ -51,10 +51,7 @@ public class AddImageThread extends Thread {
     public void run() {
         try {
             Bitmap image = MediaStore.Images.Media.getBitmap(AddImageThread.context.getContentResolver(), uri);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                image = util.getInstance().rotateImage(AddImageThread.context, image, uri);
-            }
-
+            image = util.getInstance().rotateImage(AddImageThread.context, image, uri);
             long result = CarImage.addCarImageRelation(relationId, util.getInstance().saveToInternalStorage(AddImageThread.context, image, "colorImages", relationId + "_" + new Date().getTime() + ".png"), this.id);
             if (result == -1) {
                 operationResults[1] += 1;

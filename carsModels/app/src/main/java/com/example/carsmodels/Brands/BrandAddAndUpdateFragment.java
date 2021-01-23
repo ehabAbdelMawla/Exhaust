@@ -184,7 +184,7 @@ public class BrandAddAndUpdateFragment extends AnimatedFragment {
         if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                bitmap = util.getInstance().rotateImage(getContext(), MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage), selectedImage);
                 imageView.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 bitmap = null;

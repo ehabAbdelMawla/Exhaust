@@ -1,6 +1,7 @@
 package com.example.carsmodels.Cars.Images.ImageViewPager;
 
 import android.app.Activity;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -38,6 +39,7 @@ public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         ((FlexboxLayout) images.get(delIdxVar).getParent()).removeView(images.get(delIdxVar));
         //   Remove From Slider List
         images.remove(delIdxVar);
+        updateIndicesOfImageViewList();
         if (images.size() >= 1) {
             mPager.setAdapter(this);
             if (delIdxVar == 0) {
@@ -60,5 +62,15 @@ public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return images.size();
+    }
+
+    /**
+     * To Recorrect Indecies of images View in list after deleting some inner indecies
+     */
+    public static void updateIndicesOfImageViewList() {
+            int index = 0;
+            for (CustomeImage imageView : images) {
+                imageView.setIndex(index++);
+            }
     }
 }

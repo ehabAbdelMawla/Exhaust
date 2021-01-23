@@ -151,29 +151,33 @@ public class util {
     /**
      * Files
      */
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     public Bitmap rotateImage(Context context, Bitmap bitmap, Uri selectedImage) {
-        try {
-            InputStream input = context.getContentResolver().openInputStream(selectedImage);
-            ExifInterface exifInterface = null;
-            exifInterface = new ExifInterface(input);
-            int oriantation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-            Matrix matrix = new Matrix();
-            switch (oriantation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    matrix.setRotate(90);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    matrix.setRotate(270);
-                    break;
-                default:
-                    return bitmap;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                InputStream input = context.getContentResolver().openInputStream(selectedImage);
+                ExifInterface exifInterface = null;
+                exifInterface = new ExifInterface(input);
+                int oriantation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+                Matrix matrix = new Matrix();
+                switch (oriantation) {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        matrix.setRotate(90);
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        matrix.setRotate(270);
+                        break;
+                    default:
+                        return bitmap;
+                }
+                return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        } catch (IOException e) {
-            e.printStackTrace();
+            return bitmap;
+        } else {
+            return bitmap;
         }
-        return bitmap;
+
     }
 
 
