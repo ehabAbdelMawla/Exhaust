@@ -131,12 +131,6 @@ public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
 
     public void addAction(boolean updateMode, int relationId, Color Color) {
         try {
-            System.out.println("updateMode 1" + updateMode);
-            System.out.println("updateMode 2" + updateMode);
-
-            System.out.println("relationId 1" + relationId);
-            System.out.println("relationId 2" + relationId);
-
             // ..... DataBase Effect .....
             long result = updateMode ?
                     CarColor.updateColorRelation(existReplationId, Color.getColorId()) :
@@ -148,12 +142,13 @@ public class AddNewColorOrSelectPrevOneDialogFragment extends AnimatedFragment {
             if (getDialog() != null) {
                 getDialog().dismiss();
             }
-
+            int index=-1;
             if (updateMode) {
+                index= ((FlexboxLayout) customeColorView.getParent()).indexOfChild(customeColorView);
                 ((FlexboxLayout) customeColorView.getParent()).removeView(customeColorView);
             }
             if (result > 0) {
-                ((CarsDetails) Objects.requireNonNull(getActivity())).addColor(new CarColor(relationId, carId, Color.getColorId(), Color.getColorHexCode().replace("#", "")));
+                ((CarsDetails) Objects.requireNonNull(getActivity())).addColor(new CarColor(relationId, carId, Color.getColorId(), Color.getColorHexCode().replace("#", "")),index);
             }
 
         } catch (Exception e) {

@@ -67,7 +67,7 @@ public class specificationSettings extends AnimatedActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_SPEC && resultCode == RESULT_OK && data != null) {
-            addSpecification((Specification) data.getSerializableExtra("newSpec"));
+            addSpecification((Specification) data.getSerializableExtra("newSpec"),-1);
             checkIfEmpty(specificationsContainer.getChildCount() == 0, specificationsContainer, R.string.specification_empty_msg);
         }
     }
@@ -84,7 +84,7 @@ public class specificationSettings extends AnimatedActivity {
             public void run() {
                 final ArrayList<Specification> specs = Specification.getAllspecifications();
                 for (final Specification spec : specs) {
-                    addSpecification(spec);
+                    addSpecification(spec,-1);
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -98,7 +98,7 @@ public class specificationSettings extends AnimatedActivity {
     }
 
 
-    public void addSpecification(final Specification spec) {
+    public void addSpecification(final Specification spec,final int index) {
         final View specificationView = View.inflate(this, R.layout.model_box, null);
         ((TextView) specificationView.findViewById(R.id.modelName)).setText(spec.getName());
 
@@ -121,7 +121,7 @@ public class specificationSettings extends AnimatedActivity {
                                         long result = spec.remove();
                                         if (result == 1) {
                                             Toast.makeText(getApplicationContext(), R.string.delete_specification_success_msg, Toast.LENGTH_SHORT).show();
-                                            removeViewWithAnimate(specificationsContainer, specificationView, Techniques.ZoomOutDown, 300,R.string.specification_empty_msg);
+                                            removeViewWithAnimate(specificationsContainer, specificationView, Techniques.ZoomOutDown, 300, R.string.specification_empty_msg);
                                         } else {
                                             Toast.makeText(getApplicationContext(), R.string.uncatched_error, Toast.LENGTH_SHORT).show();
                                         }
@@ -140,7 +140,7 @@ public class specificationSettings extends AnimatedActivity {
                 if (spec.getImg() != null && !spec.getImg().trim().equals("")) {
                     util.getInstance().setGlideImage(specificationSettings.this, spec.getImg(), (ImageView) specificationView.findViewById(R.id.modelImage));
                 }
-                addViewWithAnimate(specificationsContainer, specificationView, Techniques.ZoomInUp, 350);
+                addViewWithAnimate(specificationsContainer, specificationView, index, Techniques.ZoomInUp, 350);
             }
         });
     }

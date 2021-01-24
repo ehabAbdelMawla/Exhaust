@@ -175,11 +175,6 @@ public class CarsDetails extends AnimatedActivity {
      */
     private void loadInitData() {
         //        Set Car Basic info components
-        //       TODO Delete CarName TextView & carImage  Access After UI
-//        if (currentCar != null && currentCar.getImg() != null && !currentCar.getImg().trim().equals("")) {
-//            util.getInstance().setGlideImage(this, currentCar.getImg(), (ImageView) findViewById(R.id.carImage));
-//        }
-//        util.getInstance().setTextViewValue((TextView) findViewById(R.id.carName),currentCar.getCarName());
         util.getInstance().setTextViewValue((TextView) findViewById(R.id.carCountryOrigin), currentCar.getCountry());
         util.getInstance().setTextViewValue((TextView) findViewById(R.id.hoursePower), currentCar.getHoursePower() + " HP");
         util.getInstance().setTextViewValue((TextView) findViewById(R.id.motorCapacity), currentCar.getMotorCapacity() + " CC");
@@ -203,9 +198,9 @@ public class CarsDetails extends AnimatedActivity {
         checkIfEmpty(colorsContainer.getChildCount() == 0, colorsContainer, R.string.cars_colors_empty_msg);
     }
 
-    public void addColor(CarColor carColorObj) {
+    public void addColor(CarColor carColorObj, int index) {
         final FlexboxLayout colorsContainer = findViewById(R.id.carColors);
-        addViewWithAnimate(colorsContainer, new CustomeColorView(CarsDetails.this, carColorObj, currentCar.getId(), currentCar.getCarName()),
+        addViewWithAnimate(colorsContainer, new CustomeColorView(CarsDetails.this, carColorObj, currentCar.getId(), currentCar.getCarName()), index,
                 Techniques.ZoomInUp, 350);
         checkIfEmpty(colorsContainer.getChildCount() == 0, colorsContainer, R.string.cars_colors_empty_msg);
     }

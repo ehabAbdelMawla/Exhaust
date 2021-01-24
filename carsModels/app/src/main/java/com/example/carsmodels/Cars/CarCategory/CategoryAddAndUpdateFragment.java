@@ -103,16 +103,17 @@ public class CategoryAddAndUpdateFragment extends AnimatedFragment {
                     }
                 }
                 if (operationResult > 0) {
-                    Toast.makeText(getActivity(), editMode ?R.string.update_category_success_msg : R.string.add_category_success_msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), editMode ? R.string.update_category_success_msg : R.string.add_category_success_msg, Toast.LENGTH_SHORT).show();
                     if (getDialog() != null) {
                         getDialog().dismiss();
-                        FlexboxLayout parent=(FlexboxLayout) existCateg.getParent();
+                        FlexboxLayout parent = (FlexboxLayout) existCateg.getParent();
+                        int index = parent.indexOfChild(existCateg);
                         parent.removeView(existCateg);
-                        parent.addView(new customeCategoryView((AppCompatActivity)getActivity(),newCateg));
+                        parent.addView(new customeCategoryView((AppCompatActivity) getActivity(), newCateg), index);
                     } else {
-                        Intent newCategIntent=new Intent();
-                        newCategIntent.putExtra("newObj",newCateg);
-                        getActivity().setResult(RESULT_OK,newCategIntent);
+                        Intent newCategIntent = new Intent();
+                        newCategIntent.putExtra("newObj", newCateg);
+                        getActivity().setResult(RESULT_OK, newCategIntent);
                         getActivity().finish();
                     }
                 } else if (operationResult == -1) {

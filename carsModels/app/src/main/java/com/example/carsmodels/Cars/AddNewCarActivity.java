@@ -6,10 +6,12 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.carsmodels.util.AnimatedActivity;
+
 /**
  * This Activity Just Hold Add and Update Fragment
  */
-public class AddNewCarActivity extends AppCompatActivity {
+public class AddNewCarActivity extends AnimatedActivity {
 
     private final int mainLayoutId=100;
     @Override

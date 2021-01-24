@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -129,14 +130,14 @@ public class BrandAddAndUpdateFragment extends AnimatedFragment {
                                     Toast.makeText(getActivity(), updateMode ? R.string.update_brand_success_msg : R.string.add_brand_success_msg, Toast.LENGTH_SHORT).show();
                                 }
                             });
-
                             if (getDialog() != null) {
                                 getDialog().dismiss();
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        int index = ((FlexboxLayout) brandView.getParent()).indexOfChild(brandView);
                                         ((FlexboxLayout) brandView.getParent()).removeView(brandView);
-                                        ((MainActivity) getActivity()).addBrand(newBrand);
+                                        ((MainActivity) getActivity()).addBrand(newBrand, index);
                                     }
                                 });
                             } else {

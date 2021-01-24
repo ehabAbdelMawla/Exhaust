@@ -81,7 +81,7 @@ public class MainActivity extends AnimatedActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_BRAND_OBJECT && resultCode == RESULT_OK && data != null) {
-            addBrand((Brand) data.getSerializableExtra("newBrand"));
+            addBrand((Brand) data.getSerializableExtra("newBrand"), -1);
             checkIfEmpty(modelsContainer.getChildCount() == 0, modelsContainer, R.string.brand_empty_msg);
         }
     }
@@ -168,7 +168,7 @@ public class MainActivity extends AnimatedActivity {
             @Override
             public void run() {
                 for (final Brand brand : brands) {
-                    addBrand(brand);
+                    addBrand(brand, -1);
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -181,7 +181,7 @@ public class MainActivity extends AnimatedActivity {
         new CloseLoaderThread(addBrands, loaderDialog).start();
     }
 
-    public void addBrand(final Brand brand) {
+    public void addBrand(final Brand brand, final int index) {
         final View brandView = View.inflate(MainActivity.this, R.layout.model_box, null);
         ((TextView) brandView.findViewById(R.id.modelName)).setText(brand.getBrandName());
 
@@ -241,10 +241,9 @@ public class MainActivity extends AnimatedActivity {
                 if (brand.getImg() != null && !brand.getImg().trim().equals("")) {
                     util.getInstance().setGlideImage(MainActivity.this, brand.getImg(), (ImageView) brandView.findViewById(R.id.modelImage));
                 }
-                addViewWithAnimate(modelsContainer, brandView, Techniques.ZoomInUp, 350);
+                addViewWithAnimate(modelsContainer, brandView, index, Techniques.ZoomInUp, 350);
             }
         });
-
     }
 
     public ArrayList<Brand> getAllBrands() {

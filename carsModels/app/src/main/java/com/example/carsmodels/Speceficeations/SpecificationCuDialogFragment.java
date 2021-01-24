@@ -115,8 +115,9 @@ public class SpecificationCuDialogFragment extends AnimatedFragment {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
+                                            int index = ((FlexboxLayout) specificationView.getParent()).indexOfChild(specificationView);
                                             ((FlexboxLayout) specificationView.getParent()).removeView(specificationView);
-                                            ((specificationSettings) getActivity()).addSpecification(newSpecification);
+                                            ((specificationSettings) getActivity()).addSpecification(newSpecification, index);
                                         }
                                     });
                                 } else {

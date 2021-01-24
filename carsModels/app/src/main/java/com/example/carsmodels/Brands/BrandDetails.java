@@ -69,7 +69,7 @@ public class BrandDetails extends AnimatedActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_NEW_CAR_OBJECT && resultCode == RESULT_OK && data != null) {
-            addCar((Car) data.getSerializableExtra("newCar"));
+            addCar((Car) data.getSerializableExtra("newCar"),-1);
             checkIfEmpty(brandCarContainer.getChildCount()==0,brandCarContainer,R.string.car_empty_msg);
         }
     }
@@ -92,12 +92,6 @@ public class BrandDetails extends AnimatedActivity {
 //        Set Brand Basic info Data
         util.getInstance().setTextViewValue((TextView) findViewById(R.id.brandAgent), currentbBrand.getBrandAgent());
         this.setTitle(currentbBrand.getBrandName());
-//        TODO Delete Image AND Brand Name Block After UI Finished
-//        util.getInstance().setTextViewValue((TextView) findViewById(R.id.brandName), currentbBrand.getBrandName());
-//        if (currentbBrand.getImg() != null && !currentbBrand.getImg().trim().equals("")) {
-//            util.getInstance().setGlideImage(this, currentbBrand.getImg(), (ImageView) findViewById(R.id.brandImage));
-//        }
-//        ============================================================================
         /**
          * Load All Cars This Methods Should Call only One Time
          */
@@ -118,7 +112,7 @@ public class BrandDetails extends AnimatedActivity {
             public void run() {
                 ArrayList<Car> cars = getAllCarsOfBrand();
                 for (final Car currentObj : cars) {
-                    addCar(currentObj);
+                    addCar(currentObj,-1);
                 }
                 runOnUiThread(new Runnable() {
                     @Override
@@ -130,7 +124,7 @@ public class BrandDetails extends AnimatedActivity {
         }), loaderDialog).start();
     }
 
-    public void addCar(final Car currentObj) {
+    public void addCar(final Car currentObj,final int index) {
                 final View modelLayOut = View.inflate(BrandDetails.this, R.layout.model_box, null);
                 ((TextView) modelLayOut.findViewById(R.id.modelName)).setText(currentObj.getCarName());
 
@@ -182,7 +176,7 @@ public class BrandDetails extends AnimatedActivity {
                         if (currentObj.getImg() != null && !currentObj.getImg().trim().equals("")) {
                             util.getInstance().setGlideImage(BrandDetails.this, currentObj.getImg(), (ImageView) modelLayOut.findViewById(R.id.modelImage));
                         }
-                        addViewWithAnimate(brandCarContainer,modelLayOut,Techniques.ZoomInUp,350);
+                        addViewWithAnimate(brandCarContainer,modelLayOut,index,Techniques.ZoomInUp,350);
                     }
                 });
     }

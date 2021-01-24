@@ -76,6 +76,11 @@ public class AnimatedActivity extends AppCompatActivity {
         parent.addView(child);
         YoYo.with(animateType).duration(duration).playOn(child);
     }
+    protected void addViewWithAnimate(FlexboxLayout parent, View child,int index, Techniques animateType, int duration) {
+        parent.addView(child,index);
+        YoYo.with(animateType).duration(duration).playOn(child);
+    }
+
 
     public void removeViewWithAnimate(final FlexboxLayout parent, final View child, Techniques animateType, int duration) {
         YoYo.with(animateType).onEnd(new YoYo.AnimatorCallback() {

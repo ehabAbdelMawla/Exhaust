@@ -161,12 +161,12 @@ public class CarsAddAndUpdateFragment extends AnimatedFragment {
                                     @Override
                                     public void run() {
                                         getDialog().dismiss();
+                                        int index=((FlexboxLayout) carView.getParent()).indexOfChild(carView);
                                         ((FlexboxLayout) carView.getParent()).removeView(carView);
-                                        ((BrandDetails) getActivity()).addCar(newCar);
+                                        ((BrandDetails) getActivity()).addCar(newCar,index);
                                     }
                                 });
                             } else {
-
                                 Intent newCarIntent = new Intent();
                                 newCarIntent.putExtra("newCar", newCar);
                                 getActivity().setResult(RESULT_OK, newCarIntent);
