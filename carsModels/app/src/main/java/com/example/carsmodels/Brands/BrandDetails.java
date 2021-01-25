@@ -125,7 +125,7 @@ public class BrandDetails extends AnimatedActivity {
     }
 
     public void addCar(final Car currentObj,final int index) {
-                final View modelLayOut = View.inflate(BrandDetails.this, R.layout.model_box, null);
+                final View modelLayOut = View.inflate(BrandDetails.this, R.layout.car_model, null);
                 ((TextView) modelLayOut.findViewById(R.id.modelName)).setText(currentObj.getCarName());
 
                 modelLayOut.setOnClickListener(new View.OnClickListener() {
