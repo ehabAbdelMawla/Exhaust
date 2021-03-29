@@ -1,16 +1,17 @@
 package com.example.carsmodels.Cars.CarCategory;
 
-import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.gridlayout.widget.GridLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.example.carsmodels.Cars.CarsDetails;
@@ -22,14 +23,13 @@ import com.example.carsmodels.util.Dialogs.EditOrDeleteDialog;
 import com.example.carsmodels.util.util;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexboxLayout;
-
 import java.util.Map;
 
 public class customeCategoryView extends ConstraintLayout implements View.OnLongClickListener {
 
     private CarCategoty category;
     private AppCompatActivity parentActivity;
-    private Map<Integer, Boolean> sepcIds;
+    private Map<Integer, String> sepcIds;
 
     public customeCategoryView(AppCompatActivity activity, CarCategoty category) {
         super(activity);
@@ -38,16 +38,31 @@ public class customeCategoryView extends ConstraintLayout implements View.OnLong
         View.inflate(activity, R.layout.car_category_view, this);
         ((TextView) this.findViewById(R.id.carCategoryName)).setText(category.getCategName());
         this.sepcIds = util.getInstance().getSpecificationsIdsOf(category.getId());
-        FlexboxLayout sepecificationImagesContainer = this.findViewById(R.id.specificationImages);
 
-        for (int specificationId : sepcIds.keySet()) {
-            View imageViewConatiner = View.inflate(getContext(), R.layout.small_image, null);
-            util.getInstance().setGlideImage(this, CarsDetails.specificationImages.get(specificationId), (ImageView) imageViewConatiner.findViewById(R.id.image));
-            sepecificationImagesContainer.addView(imageViewConatiner);
+//        FlexboxLayout sepecificationImagesContainer = this.findViewById(R.id.specificationImages);
+        GridLayout sepecificationImagesContainer = this.findViewById(R.id.specificationImages);
+
+        /**
+         * Change Number of Grid Column when oriantation change
+         */
+
+        if(activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            sepecificationImagesContainer.setColumnCount(2);
+        }
+        else{
+            sepecificationImagesContainer.setColumnCount(3);
         }
 
-        setOnLongClickListener(this);
+        for (int specificationId : sepcIds.keySet()) {
 
+            View imageViewConatiner = View.inflate(getContext(), R.layout.small_image, null);
+            if(!CarsDetails.specificationImages.get(specificationId).trim().equals("")){
+                util.getInstance().setGlideImage(this, CarsDetails.specificationImages.get(specificationId), (ImageView) imageViewConatiner.findViewById(R.id.image));
+            }
+            ((TextView)imageViewConatiner.findViewById(R.id.specificationName)).setText(sepcIds.get(specificationId));
+            sepecificationImagesContainer.addView(imageViewConatiner);
+        }
+        setOnLongClickListener(this);
     }
 
 
@@ -67,11 +82,11 @@ public class customeCategoryView extends ConstraintLayout implements View.OnLong
         this.parentActivity = parentActivity;
     }
 
-    public Map<Integer, Boolean> getSepcIds() {
+    public Map<Integer, String> getSepcIds() {
         return sepcIds;
     }
 
-    public void setSepcIds(Map<Integer, Boolean> sepcIds) {
+    public void setSepcIds(Map<Integer, String> sepcIds) {
         this.sepcIds = sepcIds;
     }
 

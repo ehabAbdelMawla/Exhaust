@@ -88,14 +88,16 @@ public class SpecificationCuDialogFragment extends AnimatedFragment {
             public void onClick(View v) {
                 if (util.getInstance().getVal(specificationName).equalsIgnoreCase("")) {
                     Toast.makeText(getActivity(), R.string.specification_name_placeholder, Toast.LENGTH_LONG).show();
-                } else if (bitmap == null && exitsSpec == null) {
-                    Toast.makeText(getActivity(), R.string.specification_icon_placeholder, Toast.LENGTH_LONG).show();
-                } else {
+                }
+//                else if (bitmap == null && exitsSpec == null) {
+//                    Toast.makeText(getActivity(), R.string.specification_icon_placeholder, Toast.LENGTH_LONG).show();
+//                }
+                else {
                     loaderDialog.displayLoader();
                     Thread addOrUpdateSpecification = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final Specification newSpecification = new Specification(util.getInstance().getMaximum("id", "specifications"), util.getInstance().getVal(specificationName), (updateMode && bitmap == null) ? exitsSpec.getImg() : util.getInstance().saveToInternalStorage(SpecificationCuDialogFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"));
+                            final Specification newSpecification = new Specification(util.getInstance().getMaximum("id", "specifications"), util.getInstance().getVal(specificationName), (updateMode && bitmap == null) ? exitsSpec.getImg() : bitmap==null ? "":util.getInstance().saveToInternalStorage(SpecificationCuDialogFragment.this.getContext(), bitmap, "brandImages", new Date().getTime() + ".png"));
                             if (updateMode) {
                                 newSpecification.setId(exitsSpec.getId());
                                 if (bitmap != null) {

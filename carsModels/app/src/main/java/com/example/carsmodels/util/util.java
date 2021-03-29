@@ -279,7 +279,9 @@ public class util {
             while (res.moveToNext()) {
                 View rootView = View.inflate(context, R.layout.specification_radio_btn_item, null);
                 ((Switch) rootView.findViewById(R.id.switchItem)).setText(res.getString(res.getColumnIndex("name")));
-                setGlideImage(context, res.getString(res.getColumnIndex("img")), (ImageView) rootView.findViewById(R.id.specificationImage));
+                if( !res.getString(res.getColumnIndex("img")).trim().equals("")){
+                    setGlideImage(context, res.getString(res.getColumnIndex("img")), (ImageView) rootView.findViewById(R.id.specificationImage));
+                }
                 allSystemSpecification.put(res.getInt(res.getColumnIndex("id")), rootView);
             }
         } catch (Exception e) {
@@ -288,18 +290,20 @@ public class util {
         return allSystemSpecification;
     }
 
-    public Map<Integer, Boolean> getSpecificationsIdsOf(int id) {
-        Map<Integer, Boolean> ids = new HashMap<>();
+    public Map<Integer, String> getSpecificationsIdsOf(int id) {
+        Map<Integer, String> ids = new HashMap<>();
         try {
-            Cursor res = db.getReadableDatabase().rawQuery("SELECT specificationId FROM car_specifications WHERE categoryId=" + id, null);
+            Cursor res = db.getReadableDatabase().rawQuery("SELECT specificationId,name FROM car_specifications JOIN specifications WHERE car_specifications.categoryId=" + id+" and specifications.id=car_specifications.specificationId", null);
             while (res.moveToNext()) {
-                ids.put(res.getInt(res.getColumnIndex("specificationId")), true);
+                ids.put(res.getInt(res.getColumnIndex("specificationId")), res.getString(res.getColumnIndex("name")));
             }
         } catch (Exception e) {
             Log.i("carCategories", "getSpecificationsIdsOf", e);
         }
         return ids;
     }
+
+
 
     public Map<Integer, String> getAllSystemSpecificationImages() {
         Map<Integer, String> allSystemSpecification = new HashMap<>();

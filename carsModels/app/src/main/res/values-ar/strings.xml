@@ -16,7 +16,7 @@
     <string name="brand_agent_required_msg">يجب ادخال اسم الوكيل</string>
     <string name="add_brand_success_msg">تم اضافة النوع بنجاح</string>
     <!--  Update  -->
-    <string name="update_brand_success_msg">تم تعديل النزع بنجاح</string>
+    <string name="update_brand_success_msg">تم تعديل النوع بنجاح</string>
     <string name="duplicate_brand_error_msg">هذا النوع موجود بالفعل</string>
     <!-- End Brand Section    -->
 

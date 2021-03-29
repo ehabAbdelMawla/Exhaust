@@ -11,6 +11,7 @@
     >
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,12 +25,11 @@
             android:layout_height="wrap_content"
             android:paddingBottom="75dp"
             android:textAlignment="center"
-            app:justifyContent="space_around"
             app:alignContent="center"
             app:alignItems="center"
             app:flexDirection="row"
             app:flexWrap="wrap"
-         >
+            app:justifyContent="space_around">
 
         </com.google.android.flexbox.FlexboxLayout>
     </ScrollView>
@@ -91,5 +91,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/list" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

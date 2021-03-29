@@ -31,7 +31,7 @@ public class CategoryAddAndUpdateFragment extends AnimatedFragment {
      * Declare Instance Variables
      */
     private customeCategoryView existCateg;     // Edit Notation
-    private Map<Integer, Boolean> selectedIds;     // Edit Notation
+    private Map<Integer, String> selectedIds;     // Edit Notation
 
     /**
      * Defualt Constructor Used To Add Category
@@ -42,7 +42,7 @@ public class CategoryAddAndUpdateFragment extends AnimatedFragment {
     /**
      * Constructor Used For Update Category
      */
-    public CategoryAddAndUpdateFragment(customeCategoryView Categ, Map<Integer, Boolean> selectedIds) {
+    public CategoryAddAndUpdateFragment(customeCategoryView Categ, Map<Integer, String> selectedIds) {
         this.existCateg = Categ;
         this.selectedIds = selectedIds;
     }

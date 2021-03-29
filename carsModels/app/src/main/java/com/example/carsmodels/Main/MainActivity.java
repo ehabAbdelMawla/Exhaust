@@ -40,21 +40,23 @@ public class MainActivity extends AnimatedActivity {
      * Class Attributes
      */
     public static DB db;
+
     /**
      * Instance Attributes
      */
     private FlexboxLayout modelsContainer;
     private int GET_NEW_BRAND_OBJECT = 500;
-
+    private boolean developingMode=false;
     /**
      * Activity LifeCycle Events
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!Build.ID.equals("QKQ1.190825.002") && !Build.ID.equals("19.4.A.0.182")) {
+        if (!developingMode &&!Build.ID.equals("RKQ1.200826.002") && !Build.ID.equals("19.4.A.0.182")) {
             setContentView(R.layout.permission);
             System.out.println(Build.ID);
+            System.out.println("=============================");
             return;
         }
         setContentView(R.layout.activity_main);
