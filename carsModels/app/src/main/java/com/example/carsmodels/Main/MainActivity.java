@@ -53,7 +53,7 @@ public class MainActivity extends AnimatedActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!developingMode &&!Build.ID.equals("RKQ1.200826.002") && !Build.ID.equals("19.4.A.0.182")) {
+        if (!developingMode &&!Build.ID.equals("SP1A.210812.016") && !Build.ID.equals("SKQ1.210908.001")) {
             setContentView(R.layout.permission);
             System.out.println(Build.ID);
             System.out.println("=============================");
